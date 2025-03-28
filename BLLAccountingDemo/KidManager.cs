@@ -45,9 +45,53 @@ namespace BLLAccountingDemo
             _context.SaveChanges();
         }
 
-        public void RemoveKid(Kid kid)
+        public void RemoveKid(Kid kid, bool siblings)
         {
-            _context.Kids.Remove(kid);
+            if(siblings)
+            {
+                // Get the kid's siblings
+                List<Kid> kidSiblings = kid.SiblingFrom!;
+
+                // Remove self from siblings list
+                if (kidSiblings.Contains(kid))
+                    kidSiblings.RemoveAll(k => k.Id == kid.Id);
+
+                // Remove the registered siblings (kid objects still exist)
+                kid.SiblingFrom!.Clear();
+                kid.SiblingTo!.Clear();
+                _context.SaveChanges();
+
+                // Delete original kid
+                _context.Remove(kid);
+                _context.SaveChanges();
+
+                // Delete original kid's siblings
+                foreach(Kid k in kidSiblings)
+                {
+                    // Delete the other siblings, in case of >2
+                    if(k.SiblingFrom?.Count > 0)
+                    {
+                        RemoveKid(k, true);
+                    }
+                    // Delete the current kid
+                    else
+                    {
+                        _context.Remove(k);
+                        _context.SaveChanges();
+                    }
+                }
+            }
+            else
+            {
+                // Delete possible sibling relationships
+                kid.SiblingTo?.Clear();
+                kid.SiblingFrom?.Clear();
+                _context.SaveChanges();
+
+                // Remove kid
+                _context.Remove(kid);
+                _context.SaveChanges();
+            }
         }
         #endregion
     }
