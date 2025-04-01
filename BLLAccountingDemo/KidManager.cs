@@ -1,5 +1,6 @@
 ﻿using EFAccounting;
 using EFAccounting.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace BLLAccountingDemo
 {
@@ -52,17 +53,29 @@ namespace BLLAccountingDemo
                 // Get the kid's siblings
                 List<Kid> kidSiblings = kid.SiblingFrom!;
 
+                /*
+                 * No longuer needed as using soft delete
+                 * 
+                 * 
                 // Remove self from siblings list
                 if (kidSiblings.Contains(kid))
                     kidSiblings.RemoveAll(k => k.Id == kid.Id);
-
+                 *
+                 *
                 // Remove the registered siblings (kid objects still exist)
                 kid.SiblingFrom!.Clear();
                 kid.SiblingTo!.Clear();
                 _context.SaveChanges();
+                */
 
-                // Delete original kid
-                _context.Remove(kid);
+
+                // Delete original kid --> Set soft deletion to true
+                //_context.Remove(kid);
+                _context.Kids
+                    .Where(k => k.Id == kid.Id)
+                    .ExecuteUpdate(b => b
+                        .SetProperty(u => u.IsDeleted, true)
+                    );
                 _context.SaveChanges();
 
                 // Delete original kid's siblings
@@ -76,7 +89,12 @@ namespace BLLAccountingDemo
                     // Delete the current kid
                     else
                     {
-                        _context.Remove(k);
+                        //_context.Remove(k);
+                        _context.Kids
+                            .Where(ki => ki.Id == k.Id)
+                            .ExecuteUpdate(b => b
+                                .SetProperty(u => u.IsDeleted, true)
+                        );
                         _context.SaveChanges();
                     }
                 }
@@ -84,12 +102,17 @@ namespace BLLAccountingDemo
             else
             {
                 // Delete possible sibling relationships
-                kid.SiblingTo?.Clear();
-                kid.SiblingFrom?.Clear();
-                _context.SaveChanges();
+                /* kid.SiblingTo?.Clear();
+                 kid.SiblingFrom?.Clear();
+                 _context.SaveChanges();*/
 
                 // Remove kid
-                _context.Remove(kid);
+                //_context.Remove(kid);
+                _context.Kids
+                    .Where(k => k.Id == kid.Id)
+                    .ExecuteUpdate(b => b
+                        .SetProperty(u => u.IsDeleted, true)
+                    );
                 _context.SaveChanges();
             }
         }
