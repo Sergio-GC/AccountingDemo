@@ -8,6 +8,7 @@ namespace EFAccounting
     {
         public DbSet<Kid> Kids { get; set; }
         public DbSet<WDay> Wdays { get; set; }
+        public DbSet<Price> Prices { get; set; }
 
         public string DbPath { get; }
 

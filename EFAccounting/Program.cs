@@ -58,7 +58,7 @@ namespace EFAccounting
 
 
                 Price price = new() { Label = "Default price", Value = 5.0f };
-                ctx.Add(price);
+                ctx.Prices.Add(price);
                 ctx.SaveChanges();
 
 
