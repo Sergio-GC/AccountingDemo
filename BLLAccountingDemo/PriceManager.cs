@@ -13,6 +13,11 @@ namespace BLLAccountingDemo
             _context = context;
         }
 
+        public List<Price> GetPrices()
+        {
+            return _context.Prices.ToList();
+        }
+
         public void AddPrice(Price price)
         {
             _context.Prices.Add(price);
