@@ -34,14 +34,13 @@ namespace BLLAccountingDemo
 
         public void UpdateKid(Kid kid)
         {
-            Kid oldKid = _context.Kids.Where(k => k.Id == kid.Id).Single();
-
-            // Update each of its attributes
-            oldKid.SiblingTo = kid.SiblingTo;
-            oldKid.SiblingFrom = kid.SiblingFrom;
-            oldKid.BirthDate = kid.BirthDate;
-            oldKid.Name = kid.Name;
-            oldKid.LastName = kid.LastName;
+            _context.Kids.Where(k => k.Id == kid.Id).ExecuteUpdate(
+                u => u.SetProperty(p => p.SiblingTo, kid.SiblingTo)
+                .SetProperty(p => p.SiblingFrom, kid.SiblingFrom)
+                .SetProperty(p => p.BirthDate, kid.BirthDate)
+                .SetProperty(p => p.LastName, kid.LastName)
+                .SetProperty(p => p.Name, kid.Name)
+                );
 
             _context.SaveChanges();
         }
@@ -50,71 +49,22 @@ namespace BLLAccountingDemo
         {
             if(siblings)
             {
-                // Get the kid's siblings
-                List<Kid> kidSiblings = kid.SiblingFrom!;
+               // Get list of siblings
+               List<Kid> kidsSiblings = kid.SiblingFrom!.ToList();
 
-                /*
-                 * No longuer needed as using soft delete
-                 * 
-                 * 
-                // Remove self from siblings list
-                if (kidSiblings.Contains(kid))
-                    kidSiblings.RemoveAll(k => k.Id == kid.Id);
-                 *
-                 *
-                // Remove the registered siblings (kid objects still exist)
-                kid.SiblingFrom!.Clear();
-                kid.SiblingTo!.Clear();
-                _context.SaveChanges();
-                */
-
-
-                // Delete original kid --> Set soft deletion to true
-                //_context.Remove(kid);
-                _context.Kids
-                    .Where(k => k.Id == kid.Id)
-                    .ExecuteUpdate(b => b
-                        .SetProperty(u => u.IsDeleted, true)
-                    );
-                _context.SaveChanges();
-
-                // Delete original kid's siblings
-                foreach(Kid k in kidSiblings)
+                // Delete them (soft deletion)
+                foreach(Kid k in kidsSiblings)
                 {
-                    // Delete the other siblings, in case of >2
-                    if(k.SiblingFrom?.Count > 0)
-                    {
-                        RemoveKid(k, true);
-                    }
-                    // Delete the current kid
-                    else
-                    {
-                        //_context.Remove(k);
-                        _context.Kids
-                            .Where(ki => ki.Id == k.Id)
-                            .ExecuteUpdate(b => b
-                                .SetProperty(u => u.IsDeleted, true)
-                        );
-                        _context.SaveChanges();
-                    }
+                    bool ogValue = k.IsDeleted;
+                    _context.Kids.Where(ki => ki.Id == k.Id).ExecuteUpdate(u => u.SetProperty(p => p.IsDeleted, !ogValue));
                 }
             }
-            else
-            {
-                // Delete possible sibling relationships
-                /* kid.SiblingTo?.Clear();
-                 kid.SiblingFrom?.Clear();
-                 _context.SaveChanges();*/
 
-                // Remove kid
-                //_context.Remove(kid);
-                _context.Kids
-                    .Where(k => k.Id == kid.Id)
-                    .ExecuteUpdate(b => b
-                        .SetProperty(u => u.IsDeleted, true)
-                    );
-                _context.SaveChanges();
-            }
+            bool deleted = kid.IsDeleted;
+            _context.Kids.Where(k => k.Id == kid.Id).ExecuteUpdate(u => u.SetProperty(p => p.IsDeleted, !deleted));
+
+
+            _context.SaveChanges();
         }
         #endregion
     }
