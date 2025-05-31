@@ -43,8 +43,19 @@ namespace BLLAccountingDemo
         public float CalculateAmount(DateOnly StartDate, DateOnly EndDate, List<Kid> Kids)
         {
             float amount = 0f;
+            List<WDay> wdays = new List<WDay>();
 
-            List<WDay> wdays = _context.Wdays.Where(wd => Kids.Contains(wd.Kid) && wd.Date >= StartDate && wd.Date <= EndDate).ToList();
+            foreach (Kid k in Kids) 
+            {
+                wdays.AddRange(
+                    _context.Wdays.Where(
+                        wd => wd.Kid == k 
+                        && wd.Date >= StartDate 
+                        && wd.Date <= EndDate
+                    )
+                );
+            }
+            
             foreach (WDay wday in wdays) 
             {
                 TimeSpan WdayHours = (TimeOnly)wday.Departure! - (TimeOnly)wday.Arrival!;
