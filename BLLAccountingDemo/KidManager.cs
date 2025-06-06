@@ -1,52 +1,67 @@
 ﻿using EFAccounting;
-using EFAccounting.Entities;
+using DTO;
 using Microsoft.EntityFrameworkCore;
+using BLLAccountingDemo.Mapping;
+using AutoMapper;
 
 namespace BLLAccountingDemo
 {
     public class KidManager
     {
         private Context _context;
+        private readonly IMapper _profile;
 
-        public KidManager(Context context)
+        public KidManager(Context context, IMapper profile)
         {
             _context = context;
+            _profile = profile;
         }
 
         #region CRUD METHODS
         public void CreateKid(Kid kid)
         {
-            _context.Kids.Add(kid);
+            _context.Kids.Add(_profile.Map<EFAccounting.Entities.Kid>(kid));
             _context.SaveChanges();
         }
 
         public List<Kid> GetKids()
         {
-            List<Kid> result = _context.Kids.ToList();
+            List<Kid> result = _profile.Map<List<Kid>>(_context.Kids.ToList());
             return result;
         }
 
         public Kid GetKid(int kidId)
         {
-            Kid kid = _context.Kids.Where(k => k.Id == kidId).Single();
+            Kid kid = _profile.Map<Kid>(_context.Kids.Where(k => k.Id == kidId).Single());
             return kid;
         }
 
         public void UpdateKid(Kid kid)
         {
+            EFAccounting.Entities.Kid updatedKid = _profile.Map<EFAccounting.Entities.Kid>(kid);
+            bool hasSiblings = updatedKid.SiblingFrom.Count > 0;
+
             _context.Kids.Where(k => k.Id == kid.Id).ExecuteUpdate(
-                u => u.SetProperty(p => p.SiblingTo, kid.SiblingTo)
-                .SetProperty(p => p.SiblingFrom, kid.SiblingFrom)
-                .SetProperty(p => p.BirthDate, kid.BirthDate)
-                .SetProperty(p => p.LastName, kid.LastName)
-                .SetProperty(p => p.Name, kid.Name)
+                p => p.SetProperty(p => p.BirthDate, updatedKid.BirthDate)
+                .SetProperty(p => p.LastName, updatedKid.LastName)
+                .SetProperty(p => p.Name, updatedKid.Name)
                 );
+
+            if (hasSiblings)
+            {
+                _context.Kids.Where(k => k.Id == kid.Id).ExecuteUpdate(
+                    u => u.SetProperty(p => p.SiblingTo, updatedKid.SiblingTo)
+                        .SetProperty(p => p.SiblingFrom, updatedKid.SiblingFrom)
+                    );
+            }
 
             _context.SaveChanges();
         }
 
         public void RemoveKid(Kid kid, bool siblings)
         {
+            Kid ogKid = _profile.Map<Kid>(_context.Kids.Where(k => k.Id == kid.Id).Single());
+
             if(siblings)
             {
                // Get list of siblings
@@ -60,7 +75,7 @@ namespace BLLAccountingDemo
                 }
             }
 
-            bool deleted = kid.IsDeleted;
+            bool deleted = ogKid.IsDeleted;
             _context.Kids.Where(k => k.Id == kid.Id).ExecuteUpdate(u => u.SetProperty(p => p.IsDeleted, !deleted));
 
 

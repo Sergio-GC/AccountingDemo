@@ -1,26 +1,34 @@
 ﻿using EFAccounting;
-using EFAccounting.Entities;
+using DTO;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 namespace BLLAccountingDemo
 {
     public class PriceManager
     {
         private Context _context;
+        private readonly IMapper _mapper;
         
-        public PriceManager(Context context)
+        public PriceManager(Context context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public List<Price> GetPrices()
         {
-            return _context.Prices.ToList();
+            return _mapper.Map<List<Price>>(_context.Prices.ToList());
+        }
+
+        public Price GetPrice(int id)
+        {
+            return _mapper.Map<Price>(_context.Prices.Where(p => p.Id == id).Single());
         }
 
         public void AddPrice(Price price)
         {
-            _context.Prices.Add(price);
+            _context.Prices.Add(_mapper.Map<EFAccounting.Entities.Price>(price));
             _context.SaveChanges();
         }
 
@@ -35,8 +43,11 @@ namespace BLLAccountingDemo
             );
         }
 
-        public void DeletePrice(Price price, bool deletion) 
+        public void DeletePrice(Price price) 
         {
+            Price ogPrice = _mapper.Map<Price>(_context.Prices.Where(p => p.Id == price.Id).Single());
+            bool deletion = !ogPrice.IsDeleted;
+
             _context.Prices
                 .Where(p => p.Id == price.Id)
                 .ExecuteUpdate(u => u

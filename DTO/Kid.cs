@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace EFAccounting.Entities
+﻿namespace DTO
 {
     public class Kid
     {
@@ -11,7 +9,6 @@ namespace EFAccounting.Entities
         public bool IsDeleted { get; set; } = false;
 
         public virtual List<Kid>? SiblingTo { get; set; }
-        [JsonIgnore]
         public virtual List<Kid>? SiblingFrom { get; set; }
     }
 }
