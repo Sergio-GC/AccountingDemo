@@ -20,26 +20,26 @@ namespace BLLAccountingDemo
         /// Get workdays for the next 2 weeks
         /// </summary>
         /// <returns></returns>
-        public List<WDay> GetWDays()
+        public async Task<List<WDay>> GetWDays()
         {
             DateOnly currentDay = DateOnly.FromDateTime(DateTime.Now);
             DateOnly lastDay = currentDay.AddDays(14);
 
-            return _mapper.Map<List<WDay>>(_context.Wdays.Where(wd => wd.Date >= currentDay && wd.Date <= lastDay).ToList());
+            return _mapper.Map<List<WDay>>(await _context.Wdays.Where(wd => wd.Date >= currentDay && wd.Date <= lastDay).ToListAsync());
         }
 
-        public WDay GetWDay(int id)
+        public async Task<WDay> GetWDay(int id)
         {
-            return _mapper.Map<WDay>(_context.Wdays.Where(wd => wd.Id == id).Single());
+            return _mapper.Map<WDay>(await _context.Wdays.Where(wd => wd.Id == id).SingleAsync());
         }
 
         /// <summary>
         /// Get ALL workdays
         /// </summary>
         /// <returns></returns>
-        public List<WDay> GetAllWDays()
+        public async Task<List<WDay>> GetAllWDays()
         {
-            return _mapper.Map<List<WDay>>(_context.Wdays.ToList());
+            return _mapper.Map<List<WDay>>(await _context.Wdays.ToListAsync());
         }
 
         public void AddWDay(WDay wd)
@@ -53,7 +53,7 @@ namespace BLLAccountingDemo
             _context.SaveChanges();
         }
 
-        public void UpdateWDay(WDay wday) 
+        public async Task UpdateWDay(WDay wday) 
         {
             EFAccounting.Entities.WDay updatedWday = _mapper.Map<EFAccounting.Entities.WDay>(wday);
             _context.Wdays
@@ -64,7 +64,7 @@ namespace BLLAccountingDemo
                     .SetProperty(p => p.Date, updatedWday.Date)
                 );
 
-            EFAccounting.Entities.WDay wDay = _context.Wdays.Where(w => w.Id == updatedWday.Id).Single();
+            EFAccounting.Entities.WDay wDay = await _context.Wdays.Where(w => w.Id == updatedWday.Id).SingleAsync();
             wDay.Price = updatedWday.Price;
             wDay.Kid = updatedWday.Kid;
 
@@ -74,7 +74,6 @@ namespace BLLAccountingDemo
         public void DeleteWDay(WDay wDay)
         {
             _context.Wdays.Where(w => w.Id == wDay.Id).ExecuteDelete();
-            _context.SaveChanges();
         }
 
 

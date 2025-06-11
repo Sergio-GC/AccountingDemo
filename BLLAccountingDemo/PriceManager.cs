@@ -16,14 +16,14 @@ namespace BLLAccountingDemo
             _mapper = mapper;
         }
 
-        public List<Price> GetPrices()
+        public async Task<List<Price>> GetPrices()
         {
-            return _mapper.Map<List<Price>>(_context.Prices.ToList());
+            return _mapper.Map<List<Price>>(await _context.Prices.ToListAsync());
         }
 
-        public Price GetPrice(int id)
+        public async Task<Price> GetPrice(int id)
         {
-            return _mapper.Map<Price>(_context.Prices.Where(p => p.Id == id).Single());
+            return _mapper.Map<Price>(await _context.Prices.Where(p => p.Id == id).SingleAsync());
         }
 
         public void AddPrice(Price price)
@@ -40,12 +40,12 @@ namespace BLLAccountingDemo
                     .SetProperty(p => p.Value, price.Value)
                     .SetProperty(p => p.IsDeleted, price.IsDeleted)
                     .SetProperty(p => p.Label, price.Label)
-            );
+                );
         }
 
-        public void DeletePrice(Price price) 
+        public async Task DeletePrice(Price price) 
         {
-            Price ogPrice = _mapper.Map<Price>(_context.Prices.Where(p => p.Id == price.Id).Single());
+            Price ogPrice = _mapper.Map<Price>(await _context.Prices.Where(p => p.Id == price.Id).SingleAsync());
             bool deletion = !ogPrice.IsDeleted;
 
             _context.Prices

@@ -16,15 +16,15 @@ namespace AccountingDemoAPI.Controllers
         }
 
         [HttpGet("prices")]
-        public List<Price> GetPrices()
+        public async Task<ActionResult<List<Price>>> GetPrices()
         {
-            return _manager.GetPrices();
+            return await _manager.GetPrices();
         }
 
         [HttpGet("price/{id}")]
-        public Price GetPrice(int id)
+        public async Task<ActionResult<Price>> GetPrice(int id)
         {
-            return _manager.GetPrice(id);
+            return await _manager.GetPrice(id);
         }
 
         [HttpPost]

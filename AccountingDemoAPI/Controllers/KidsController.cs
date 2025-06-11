@@ -17,16 +17,17 @@ namespace AccountingDemoAPI.Controllers
 
         // GET: KidsController
         [HttpGet]
-        public List<Kid> Index()
+        public async Task<ActionResult<List<Kid>>> Index()
         {
-            return _kidManager.GetKids();
+            List<Kid> result = await _kidManager.GetKids();
+            return Ok(result);
         }
 
         // GET: KidsController/Details/5
         [HttpGet("Kid/{id}")]
-        public Kid GetKid(int id)
+        public async Task<ActionResult<Kid>> GetKid(int id)
         {
-            return _kidManager.GetKid(id);
+            return await _kidManager.GetKid(id);
         }
 
         // Post: KidsController/Create

@@ -3,6 +3,7 @@ using DTO;
 using Microsoft.EntityFrameworkCore;
 using BLLAccountingDemo.Mapping;
 using AutoMapper;
+using System.Threading.Tasks;
 
 namespace BLLAccountingDemo
 {
@@ -24,38 +25,32 @@ namespace BLLAccountingDemo
             _context.SaveChanges();
         }
 
-        public List<Kid> GetKids()
+        public async Task<List<Kid>> GetKids()
         {
-            List<Kid> result = _profile.Map<List<Kid>>(_context.Kids.ToList());
-            return result;
+            return _profile.Map<List<Kid>>(await _context.Kids.ToListAsync());
         }
 
-        public Kid GetKid(int kidId)
+        public async Task<Kid> GetKid(int kidId)
         {
-            Kid kid = _profile.Map<Kid>(_context.Kids.Where(k => k.Id == kidId).Single());
+            Kid kid = _profile.Map<Kid>(await _context.Kids.Where(k => k.Id == kidId).SingleAsync());
             return kid;
         }
 
         public void UpdateKid(Kid kid)
         {
             EFAccounting.Entities.Kid updatedKid = _profile.Map<EFAccounting.Entities.Kid>(kid);
-            bool hasSiblings = updatedKid.SiblingFrom.Count > 0;
+            bool hasSiblings = updatedKid.SiblingFrom!.Count > 0;
 
-            _context.Kids.Where(k => k.Id == kid.Id).ExecuteUpdate(
+            _context.Kids.Where(k => k.Id == updatedKid.Id).ExecuteUpdate(
                 p => p.SetProperty(p => p.BirthDate, updatedKid.BirthDate)
                 .SetProperty(p => p.LastName, updatedKid.LastName)
                 .SetProperty(p => p.Name, updatedKid.Name)
+                .SetProperty(p => p.IsDeleted, updatedKid.IsDeleted)
+                .SetProperty(p => p.SiblingTo, updatedKid.SiblingTo)
+                .SetProperty(p => p.SiblingFrom, updatedKid.SiblingFrom)
                 );
 
-            if (hasSiblings)
-            {
-                _context.Kids.Where(k => k.Id == kid.Id).ExecuteUpdate(
-                    u => u.SetProperty(p => p.SiblingTo, updatedKid.SiblingTo)
-                        .SetProperty(p => p.SiblingFrom, updatedKid.SiblingFrom)
-                    );
-            }
-
-            _context.SaveChanges();
+            //_context.SaveChanges();
         }
 
         public void RemoveKid(Kid kid, bool siblings)
@@ -65,7 +60,7 @@ namespace BLLAccountingDemo
             if(siblings)
             {
                // Get list of siblings
-               List<Kid> kidsSiblings = kid.SiblingFrom!.ToList();
+               List<Kid> kidsSiblings = ogKid.SiblingFrom!.ToList();
 
                 // Delete them (soft deletion)
                 foreach(Kid k in kidsSiblings)
@@ -75,7 +70,7 @@ namespace BLLAccountingDemo
                 }
             }
 
-            bool deleted = ogKid.IsDeleted;
+            bool deleted = kid.IsDeleted;
             _context.Kids.Where(k => k.Id == kid.Id).ExecuteUpdate(u => u.SetProperty(p => p.IsDeleted, !deleted));
 
 

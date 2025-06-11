@@ -10,8 +10,8 @@ namespace EFAccounting.Entities
         public DateOnly? BirthDate { get; set; }
         public bool IsDeleted { get; set; } = false;
 
-        public virtual List<Kid>? SiblingTo { get; set; }
+        public virtual List<Kid>? SiblingTo { get; set; } = new List<Kid>();
         [JsonIgnore]
-        public virtual List<Kid>? SiblingFrom { get; set; }
+        public virtual List<Kid>? SiblingFrom { get; set; } = new List<Kid>();
     }
 }

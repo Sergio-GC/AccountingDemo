@@ -16,21 +16,21 @@ namespace AccountingDemoAPI.Controllers
         }
 
         [HttpGet("wdays")]
-        public List<WDay> GetWDays()
+        public async Task<ActionResult<List<WDay>>> GetWDays()
         {
-            return _manager.GetWDays();
+            return await _manager.GetWDays();
         }
 
         [HttpGet("wday/{id}")]
-        public WDay GetWday(int id)
+        public async Task<ActionResult<WDay>> GetWday(int id)
         {
-            return _manager.GetWDay(id);
+            return await _manager.GetWDay(id);
         }
 
         [HttpGet("allwdays")]
-        public List<WDay> GetAllWDays()
+        public async Task<ActionResult<List<WDay>>> GetAllWDays()
         {
-            return _manager.GetAllWDays();
+            return await _manager.GetAllWDays();
         }
 
         [HttpPut]
