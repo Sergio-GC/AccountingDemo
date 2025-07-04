@@ -23,12 +23,6 @@ namespace WebApp.Controllers
             return View();
         }
 
-        public async Task<IActionResult> NextDays()
-        {
-            List<WDay> wdays = await _httpClient.GetFromJsonAsync<List<WDay>>(_baseUrl + "wdays/wdays");
-            return View(wdays);
-        }
-
         public IActionResult Privacy()
         {
             return View();
