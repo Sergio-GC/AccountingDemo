@@ -1,6 +1,5 @@
 ﻿using EFAccounting.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace EFAccounting
 {
@@ -9,6 +8,7 @@ namespace EFAccounting
         public DbSet<Kid> Kids { get; set; }
         public DbSet<WDay> Wdays { get; set; }
         public DbSet<Price> Prices { get; set; }
+        public DbSet<SiblingRelationship> SiblingRelationships { get; set; }
 
         public string DbPath { get; }
 
@@ -18,24 +18,23 @@ namespace EFAccounting
         // Create relations between kids to store siblings
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Kid>()
-                .HasMany(k => k.SiblingTo)
-                .WithMany(k => k.SiblingFrom)
-                .UsingEntity(e => e.ToTable("KidSiblings"));
+            // Create primary key for the relationship entity
+            modelBuilder.Entity<SiblingRelationship>()
+                .HasKey(r => new { r.FromKidId, r.ToKidId });
+
+            // I honestly don't know :/
+            modelBuilder.Entity<SiblingRelationship>()
+                .HasOne(r => r.FromKid)
+                .WithMany(k => k.Siblings)
+                .HasForeignKey(f => f.FromKidId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // I honestly don't know :/
+            modelBuilder.Entity<SiblingRelationship>()
+                .HasOne(r => r.ToKid)
+                .WithMany()
+                .HasForeignKey(f => f.ToKidId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
-
-        //// Load connection string from appsettings.json file
-        //protected override void OnConfiguring(DbContextOptionsBuilder builder)
-        //{
-        //    IConfigurationRoot config = new ConfigurationBuilder()
-        //        .SetBasePath(Directory.GetCurrentDirectory())
-        //        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-        //        .Build();
-
-        //    string connectionString = config.GetConnectionString("DefaultDb");
-
-        //    builder.UseLazyLoadingProxies();
-        //    builder.UseMySql(config.GetConnectionString("DefaultDb"), new MySqlServerVersion(new Version())).EnableDetailedErrors().EnableSensitiveDataLogging();
-        //}
     }
 }

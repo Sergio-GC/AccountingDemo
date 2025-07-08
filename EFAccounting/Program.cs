@@ -46,25 +46,25 @@ namespace EFAccounting
                 {
                     BirthDate = new DateOnly(2015, 3, 14),
                     Name = "Leticia",
-                    LastName = "Magallhaes",
-                    SiblingFrom = new List<Kid>(),
-                    SiblingTo = new List<Kid>(),
+                    LastName = "Magallhaes"
                 };
                 Kid Carolina = new()
                 {
                     BirthDate = new DateOnly(2018, 12, 5),
                     Name = "Carolina",
-                    LastName = "Magallhaes",
-                    SiblingTo = new List<Kid>(),
-                    SiblingFrom = new List<Kid>()
+                    LastName = "Magallhaes"
                 };
 
-                Leticia.SiblingTo.Add(Carolina);
-                Carolina.SiblingFrom.Add(Leticia);
-                Carolina.SiblingTo.Add(Leticia);
-                Leticia.SiblingFrom.Add(Carolina);
-
                 ctx.Kids.AddRange(Leticia, Carolina);
+                ctx.SaveChanges();
+
+                SiblingRelationship sr = new SiblingRelationship() { FromKidId = Leticia.Id, ToKidId = Carolina.Id};
+                SiblingRelationship sr2 = new SiblingRelationship() { FromKidId = Carolina.Id, ToKidId = Leticia.Id };
+
+                Leticia.Siblings.Add(sr);
+                Carolina.Siblings.Add(sr2);
+
+                ctx.SiblingRelationships.AddRange(sr, sr2);
                 ctx.SaveChanges();
 
                 var price = new Price { Label = "Default price", Value = 5.0f };
