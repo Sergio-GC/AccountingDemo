@@ -8,7 +8,7 @@
         public DateOnly? BirthDate { get; set; }
         public bool IsDeleted { get; set; } = false;
 
-        public virtual List<Kid>? SiblingTo { get; set; }
-        public virtual List<Kid>? SiblingFrom { get; set; }
+
+        public virtual ICollection<SiblingRelationship> Siblings { get; set; } = new List<SiblingRelationship>();
     }
 }
