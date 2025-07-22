@@ -14,6 +14,9 @@ namespace BLLAccountingDemo.Mapping
 
             CreateMap<DTO.WDay, EFAccounting.Entities.WDay>();
             CreateMap<EFAccounting.Entities.WDay, DTO.WDay>();
+
+            CreateMap<DTO.SiblingRelationship, EFAccounting.Entities.SiblingRelationship>();
+            CreateMap<EFAccounting.Entities.SiblingRelationship, DTO.SiblingRelationship>();
         }
     }
 }

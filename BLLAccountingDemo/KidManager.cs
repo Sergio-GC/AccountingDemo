@@ -1,9 +1,7 @@
 ﻿using EFAccounting;
 using DTO;
 using Microsoft.EntityFrameworkCore;
-using BLLAccountingDemo.Mapping;
 using AutoMapper;
-using System.Threading.Tasks;
 
 namespace BLLAccountingDemo
 {
@@ -39,28 +37,30 @@ namespace BLLAccountingDemo
         public void UpdateKid(Kid kid)
         {
             EFAccounting.Entities.Kid updatedKid = _profile.Map<EFAccounting.Entities.Kid>(kid);
-            bool hasSiblings = updatedKid.SiblingFrom!.Count > 0;
+            bool hasSiblings = updatedKid.Siblings.Count > 0;
 
             _context.Kids.Where(k => k.Id == updatedKid.Id).ExecuteUpdate(
                 p => p.SetProperty(p => p.BirthDate, updatedKid.BirthDate)
                 .SetProperty(p => p.LastName, updatedKid.LastName)
                 .SetProperty(p => p.Name, updatedKid.Name)
                 .SetProperty(p => p.IsDeleted, updatedKid.IsDeleted)
-                .SetProperty(p => p.SiblingTo, updatedKid.SiblingTo)
-                .SetProperty(p => p.SiblingFrom, updatedKid.SiblingFrom)
+                .SetProperty(p => p.Siblings, updatedKid.Siblings)
                 );
 
             //_context.SaveChanges();
         }
 
-        public void RemoveKid(Kid kid, bool siblings)
+        public async Task RemoveKid(Kid kid, bool siblings)
         {
             Kid ogKid = _profile.Map<Kid>(_context.Kids.Where(k => k.Id == kid.Id).Single());
 
             if(siblings)
             {
-               // Get list of siblings
-               List<Kid> kidsSiblings = ogKid.SiblingFrom!.ToList();
+                // Get list of siblings
+                List<Kid> kidsSiblings = new();
+                List<int> fromIds = await _context.SiblingRelationships.Where(r => r.FromKidId == kid.Id).Select(s => s.ToKidId).ToListAsync();
+
+                kidsSiblings = _profile.Map<List<Kid>>(await _context.Kids.Where(k => fromIds.Contains(k.Id)).ToListAsync()).ToList();
 
                 // Delete them (soft deletion)
                 foreach(Kid k in kidsSiblings)
@@ -74,7 +74,7 @@ namespace BLLAccountingDemo
             _context.Kids.Where(k => k.Id == kid.Id).ExecuteUpdate(u => u.SetProperty(p => p.IsDeleted, !deleted));
 
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
         #endregion
     }
