@@ -4,27 +4,6 @@
     ViewData["Title"] = "Index";
 }
 
-
-@{
-
-    var events = Model.Select(item => new
-    {
-        title = item.Kid.Name,
-        start = item.Date.ToDateTime(TimeOnly.MinValue).Add(item.Arrival.HasValue ? item.Arrival.Value.ToTimeSpan() : TimeSpan.Zero).ToString("yyyy-MM-dd HH:mm:ss"),
-    }).ToList();
-}
-
-<script>
-    addEventListener('DOMContentLoaded', function() {
-        var calendarElement = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarElement, {
-            initialView: 'dayGridMonth',
-            events: @Html.Raw(Json.Serialize(events))  // Serialize and inject the events as JSON
-        });
-        calendar.render();
-    });
-</script>
-
 <h1>Index</h1>
 
 <p>
@@ -77,6 +56,4 @@
         </tr>
 }
     </tbody>
-
-    <div id="calendar"></div>
 </table>

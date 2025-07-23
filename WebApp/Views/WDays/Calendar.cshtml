@@ -1,0 +1,52 @@
+@model IEnumerable<DTO.WDay>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+@{
+
+    var events = Model.Select(item => new
+    {
+        title = item.Kid.Name,
+        start = item.Arrival.HasValue ? item.Date.ToDateTime(TimeOnly.MinValue).Add(item.Arrival.Value.ToTimeSpan()).ToString("yyyy-MM-dd HH:mm:ss") : item.Date.ToString("yyyy-MM-dd"),
+        end = item.Date.ToDateTime(TimeOnly.MinValue).Add(item.Departure.HasValue ? item.Departure.Value.ToTimeSpan() : TimeSpan.Zero).ToString("yyyy-MM-dd HH:mm:ss"),
+        hasTime = item.Arrival.HasValue
+    }).ToList();
+}
+
+<script>
+    addEventListener('DOMContentLoaded', function() {
+        var calendarElement = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarElement, {
+            initialView: 'dayGridMonth',
+            displayEventEnd: true,
+              events: @Html.Raw(Json.Serialize(events)), // Serialize and inject the events as JSON
+            eventTimeFormat: {
+              hour: '2-digit',
+              minute: '2-digit',
+              meridiem: false
+            },
+            
+            eventDidMount: function(info) {
+                // Remove time label if event has no start time
+                if (!info.event.extendedProps.hasTime) {
+                    let timeEl = info.el.querySelector('.fc-event-time');
+                    if (timeEl) {
+                        timeEl.style.display = 'none';
+                    }
+                }
+            }
+        });
+        calendar.render();
+    });
+</script>
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+    <div id="calendar"></div>
+</table>

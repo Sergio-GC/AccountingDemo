@@ -32,7 +32,10 @@
                             <a class="nav-link @UserIsInPage("Home")" aria-current="page" href="#">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link @UserIsInPage("WDays")" asp-action="Index" asp-controller="WDays">Next days</a>
+                            <a class="nav-link @UserIsInPage("WDays")" asp-action="Index" asp-controller="WDays">Accueil</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @UserIsInPage("WDays")" asp-action="Calendar" asp-controller="WDays">Calendar</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link @UserIsInPage("Kids")" href="#">Kids</a>
