@@ -25,6 +25,12 @@ namespace WebApp.Controllers
             return View(wDays);
         }
 
+        public async Task<IActionResult> Calendar()
+        {
+            List<WDay> wDays = await _httpClient.GetFromJsonAsync<List<WDay>>(_baseUrl + "wdays/wdays");
+            return View(wDays);
+        }
+
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -75,7 +81,8 @@ namespace WebApp.Controllers
                 ModelState.AddModelError("", $"Error while creating a new WDay: {response.StatusCode}");
                 return View();
             }
-            return View("Index");
+
+            return RedirectToAction("Index");
         }
 
 
