@@ -147,11 +147,20 @@
   <data name="Home" xml:space="preserve">
     <value>Accueil</value>
   </data>
+  <data name="IsDeleted" xml:space="preserve">
+    <value>Annulé</value>
+  </data>
   <data name="Kid" xml:space="preserve">
     <value>Enfant</value>
   </data>
   <data name="Kids" xml:space="preserve">
     <value>Enfants</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Nom</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Prénom</value>
   </data>
   <data name="Price" xml:space="preserve">
     <value>Prix</value>
