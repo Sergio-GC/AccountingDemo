@@ -117,8 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Accueil" xml:space="preserve">
+    <value>Inicio</value>
+  </data>
   <data name="Arrival" xml:space="preserve">
     <value>Hora de llegada</value>
+  </data>
+  <data name="Calendar" xml:space="preserve">
+    <value>Calendario</value>
   </data>
   <data name="Create" xml:space="preserve">
     <value>Crear - es-ES</value>
@@ -138,8 +144,14 @@
   <data name="Edit" xml:space="preserve">
     <value>Modificar</value>
   </data>
+  <data name="Home" xml:space="preserve">
+    <value>Inicio</value>
+  </data>
   <data name="Kid" xml:space="preserve">
     <value>Niño</value>
+  </data>
+  <data name="Kids" xml:space="preserve">
+    <value>Niños</value>
   </data>
   <data name="Price" xml:space="preserve">
     <value>Precio</value>
