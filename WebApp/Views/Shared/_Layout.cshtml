@@ -4,11 +4,14 @@
 @inject LocaleService SharedLocale
 
 @functions{
-    public string UserIsInPage(string controller){
+    public string UserIsInPage(string controller, string action){
         string currentController = ViewContext.RouteData.Values["controller"].ToString();
-        Console.WriteLine(ViewContext.RouteData.Values);
+        string currentAction = ViewContext.RouteData.Values["action"].ToString();
 
-        return controller.Equals(currentController, StringComparison.OrdinalIgnoreCase) ? "active" : "";
+        bool isSelected = controller.Equals(currentController, StringComparison.OrdinalIgnoreCase) && 
+            action.Equals(currentAction, StringComparison.OrdinalIgnoreCase);
+
+        return isSelected ? "active" : "";
     }
 
     string GetFlagIcon(string cultureName)
@@ -58,16 +61,16 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link @UserIsInPage("Home")" aria-current="page" href="#">@SharedLocale.GetLocalizedString("Home")</a>
+                            <a class="nav-link @UserIsInPage("Home", "Index")" aria-current="page" href="#">@SharedLocale.GetLocalizedString("Home")</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link @UserIsInPage("WDays")" asp-action="Index" asp-controller="WDays">@SharedLocale.GetLocalizedString("Accueil")</a>
+                            <a class="nav-link @UserIsInPage("WDays", "Index")" asp-action="Index" asp-controller="WDays">@SharedLocale.GetLocalizedString("Accueil")</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link @UserIsInPage("WDays")" asp-action="Calendar" asp-controller="WDays">@SharedLocale.GetLocalizedString("Calendar")</a>
+                            <a class="nav-link @UserIsInPage("WDays", "Calendar")" asp-action="Calendar" asp-controller="WDays">@SharedLocale.GetLocalizedString("Calendar")</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link @UserIsInPage("Kids")" href="#">@SharedLocale.GetLocalizedString("Kids")</a>
+                            <a class="nav-link @UserIsInPage("Kids", "Index")" href="#">@SharedLocale.GetLocalizedString("Kids")</a>
                         </li>
                     </ul>
 
