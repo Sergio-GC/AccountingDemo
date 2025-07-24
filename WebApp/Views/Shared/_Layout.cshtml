@@ -1,7 +1,31 @@
-﻿@functions{
+﻿@using System.Globalization
+
+@functions{
     public string UserIsInPage(string controller){
         string currentController = ViewContext.RouteData.Values["controller"].ToString();
         return controller.Equals(currentController, StringComparison.OrdinalIgnoreCase) ? "active" : "";
+    }
+
+    string GetFlagIcon(string cultureName)
+    {
+        return cultureName switch
+        {
+            "en-US" => "🇺🇸",
+            "es-ES" => "🇪🇸",
+            "fr-CH" => "🇨🇭",
+            _ => "🌐"
+        };
+    }
+
+    string GetLanguageDisplayName(string cultureName)
+    {
+        return cultureName switch
+        {
+            "en-US" => "English",
+            "es-ES" => "Español",
+            "fr-CH" => "Français",
+            _ => cultureName
+        };
     }
 }
 
@@ -39,6 +63,31 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link @UserIsInPage("Kids")" href="#">Kids</a>
+                        </li>
+                    </ul>
+
+                    @* Culture switch *@
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <li class="nav-item dropdown">
+                            <form asp-controller="Culture" asp-action="SetLanguage" method="post" class="d-inline">
+                                <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+                                <a class="nav-link dropdown-toggle" href="#" id="langDropdown" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    @GetFlagIcon(CultureInfo.CurrentUICulture.Name)
+                                    @GetLanguageDisplayName(CultureInfo.CurrentUICulture.Name)
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+                                    @foreach (var culture in new[] { "en-US", "es-ES", "fr-CH" })
+                                    {
+                                        <li>
+                                            <button class="dropdown-item" type="submit" name="culture" value="@culture">
+                                                @GetFlagIcon(culture)
+                                                @GetLanguageDisplayName(culture)
+                                            </button>
+                                        </li>
+                                    }
+                                </ul>
+                            </form>
                         </li>
                     </ul>
                 </div>

@@ -16,19 +16,19 @@
     <thead class="table-light">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Date)
+                @SharedLocalizer.GetLocalizedString(Html.DisplayNameFor(model => model.Date))
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Arrival)
+                @SharedLocalizer.GetLocalizedString(Html.DisplayNameFor(model => model.Arrival))
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Departure)
+                @SharedLocalizer.GetLocalizedString(Html.DisplayNameFor(model => model.Departure))
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Kid)
+                @SharedLocalizer.GetLocalizedString(Html.DisplayNameFor(model => model.Kid))
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+                @SharedLocalizer.GetLocalizedString(Html.DisplayNameFor(model => model.Price))
             </th>
             <th></th>
         </tr>
@@ -52,9 +52,9 @@
                 @Html.DisplayFor(model => item.Price.Value)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id">@SharedLocalizer.GetLocalizedString("Edit")</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">@SharedLocalizer.GetLocalizedString("Details")</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">@SharedLocalizer.GetLocalizedString("Delete")</a>
             </td>
         </tr>
 }

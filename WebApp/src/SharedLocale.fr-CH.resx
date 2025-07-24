@@ -117,7 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Arrival" xml:space="preserve">
+    <value>Heure d'arrivée</value>
+  </data>
   <data name="Create" xml:space="preserve">
     <value>Créer - fr-CH</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Effacer</value>
+  </data>
+  <data name="Departure" xml:space="preserve">
+    <value>Heure de sortie</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Voir en détail</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Modifier</value>
+  </data>
+  <data name="Kid" xml:space="preserve">
+    <value>Enfant</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Prix</value>
   </data>
 </root>
