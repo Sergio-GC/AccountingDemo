@@ -33,6 +33,47 @@ namespace AccountingDemoAPI.Controllers
             return await _manager.GetAllWDays();
         }
 
+        [HttpPost("updateTime")]
+        public async Task<IActionResult> UpdateArrival([FromBody] WDay wday, [FromQuery] bool IsArrival)
+        {
+            if(IsArrival)
+                wday.Arrival = RoundTime(IsArrival);
+            else
+                wday.Departure = RoundTime(IsArrival);
+
+            try
+            {
+                await _manager.UpdateWDay(wday);
+                return Ok();
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, $"Internal server error: {e.Message}");
+            }
+
+        }
+
+        private TimeOnly RoundTime(bool up)
+        {
+            TimeOnly currentTime = TimeOnly.FromDateTime(DateTime.Now);
+            int minutes = currentTime.Minute;
+            int minutesMod5 = minutes % 5;
+
+            if (minutesMod5 != 0)
+            {
+                if (up)
+                {
+                    currentTime = currentTime.AddMinutes(5 - minutesMod5);
+                }
+                else
+                {
+                    currentTime = currentTime.AddMinutes(-minutesMod5);
+                }
+            }
+
+            return currentTime;
+        }
+
         [HttpPut]
         public void UpdateWDay(WDay wd)
         {

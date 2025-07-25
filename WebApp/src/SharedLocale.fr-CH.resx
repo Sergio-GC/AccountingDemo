@@ -165,4 +165,10 @@
   <data name="Price" xml:space="preserve">
     <value>Prix</value>
   </data>
+  <data name="updateArrival" xml:space="preserve">
+    <value>Mettre à jour l'heure d'arrivée</value>
+  </data>
+  <data name="updateDeparture" xml:space="preserve">
+    <value>Mettre à jour l'heure de départ</value>
+  </data>
 </root>

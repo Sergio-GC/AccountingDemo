@@ -21,9 +21,16 @@
             <th>
                 @SharedLocalizer.GetLocalizedString(Html.DisplayNameFor(model => model.Arrival))
             </th>
+            @* <td> *@
+            @*     <button type="button" class="btn btn-info" asp-action="UpdateArrival"> *@
+            @*         Update arrival *@
+            @*     </button> *@
+            @* </td> *@
+            <th/>
             <th>
                 @SharedLocalizer.GetLocalizedString(Html.DisplayNameFor(model => model.Departure))
             </th>
+            <th/>
             <th>
                 @SharedLocalizer.GetLocalizedString(Html.DisplayNameFor(model => model.Kid))
             </th>
@@ -42,8 +49,55 @@
             <td>
                 @Html.DisplayFor(model => item.Arrival)
             </td>
+            @* <td> *@
+            @*     <button type="button" class="btn btn-info" asp-action="UpdateArrival"> *@
+            @*         Update arrival *@
+            @*     </button> *@
+            @* </td> *@
+            <td>
+                <form asp-action="UpdateTime" method="post" style="display:@(item.Date == DateOnly.FromDateTime(DateTime.Today) ? "inline" : "none");">
+                    <input type="hidden" name="Id" value="@item.Id" />
+                    <input type="hidden" name="Date" value="@item.Date.ToString("o")" />
+                    <input type="hidden" name="Arrival" value="@item.Arrival?.ToString()" />
+                    <input type="hidden" name="Departure" value="@item.Departure?.ToString()" />
+                    <input type="hidden" name="Price.Value" value="@item.Price?.Value.ToString()" />
+                    <input type="hidden" name="Kid.Id" value="@item.Kid.Id" />
+                    <input type="hidden" name="Kid.Name" value="@item.Kid.Name" />
+                    <input type="hidden" name="Kid.LastName" value="@item.Kid.LastName" />
+                    <input type="hidden" name="Kid.Birthdate" value="@item.Kid.BirthDate?.ToString()" />
+                    <input type="hidden" name="Kid.IsDeleted" value="@item.Kid.IsDeleted" />
+                    <input type="hidden" name="Price.Id" value="@item.Price?.Id" />
+                    <input type="hidden" name="Price.Label" value="@item.Price?.Label" />
+                    <input type="hidden" name="Price.IsDeleted" value="@item.Price?.IsDeleted" />
+
+                    <input type="hidden" name="IsArrival" value="true"/>
+
+                        <button type="submit" class="btn btn-info">@SharedLocalizer.GetLocalizedString("updateArrival")</button>
+                </form>
+            </td>
             <td>
                 @Html.DisplayFor(model => item.Departure)
+            </td>
+            <td>
+                <form asp-action="UpdateTime" method="post" style="display:@(item.Date == DateOnly.FromDateTime(DateTime.Today) ? "inline" : "none");">
+                    <input type="hidden" name="Id" value="@item.Id" />
+                    <input type="hidden" name="Date" value="@item.Date.ToString("o")" />
+                    <input type="hidden" name="Arrival" value="@item.Arrival?.ToString()" />
+                    <input type="hidden" name="Departure" value="@item.Departure?.ToString()" />
+                    <input type="hidden" name="Price.Value" value="@item.Price?.Value.ToString()" />
+                    <input type="hidden" name="Kid.Id" value="@item.Kid.Id" />
+                    <input type="hidden" name="Kid.Name" value="@item.Kid.Name" />
+                    <input type="hidden" name="Kid.LastName" value="@item.Kid.LastName" />
+                    <input type="hidden" name="Kid.Birthdate" value="@item.Kid.BirthDate?.ToString()" />
+                    <input type="hidden" name="Kid.IsDeleted" value="@item.Kid.IsDeleted" />
+                    <input type="hidden" name="Price.Id" value="@item.Price?.Id" />
+                    <input type="hidden" name="Price.Label" value="@item.Price?.Label" />
+                    <input type="hidden" name="Price.IsDeleted" value="@item.Price?.IsDeleted" />
+
+                    <input type="hidden" name="IsArrival" value="false" />
+
+                        <button type="submit" class="btn btn-info">@SharedLocalizer.GetLocalizedString("updateDeparture")</button>
+                </form>
             </td>
             <td>
                 @Html.DisplayFor(model => item.Kid.Name)

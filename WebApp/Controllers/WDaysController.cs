@@ -85,6 +85,21 @@ namespace WebApp.Controllers
             return RedirectToAction("Index");
         }
 
+        public async Task<IActionResult> UpdateTime(WDay wday, bool IsArrival)
+        {
+            if(wday == null)
+            {
+                ModelState.AddModelError("", "WDay cannot be empty.");
+                return RedirectToAction("Index");
+            }
+
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync(_baseUrl + "wdays/updateTime?IsArrival=" + IsArrival, wday);
+            if (!response.IsSuccessStatusCode)
+                ModelState.AddModelError("", $"There was an error while updating the arrival time. Error code: {response.StatusCode}");
+
+            return RedirectToAction("Index");
+        }
+
 
         private async Task PopulateViewBag()
         {
