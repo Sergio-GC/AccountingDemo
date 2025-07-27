@@ -1,0 +1,68 @@
+﻿@model DTO.WDay
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>WDay</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Date" class="control-label"></label>
+                <input asp-for="Date" class="form-control" type="date" min="@(DateTime.Today.ToString())" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Arrival" class="control-label"></label>
+                <input asp-for="Arrival" class="form-control" type="time" />
+                <span asp-validation-for="Arrival" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Departure" class="control-label"></label>
+                <input asp-for="Departure" class="form-control" type="time" step="60" />
+                <span asp-validation-for="Departure" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="KidId" class="control-label">Kid</label>
+                <select class="form-control" name="KidId" id="KidId">
+                    <option value="">-- Select Kid --</option>
+                    @foreach (var kid in (List<DTO.Kid>)ViewBag.Kids)
+                    {
+                        <option value="@kid.Id" selected="@Model.Kid.Name.Equals(kid.Name)">@kid.Name</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="PriceId" class="control-label">Price</label>
+                <select class="form-control" name="PriceId" id="PriceId">
+                    <option value="">-- Select Price --</option>
+                    @foreach (var price in (List<DTO.Price>)ViewBag.Prices)
+                    {
+                        <option value="@price.Id" selected="@((Model.Price.Value + " - " + Model.Price.Label).Equals((price.Value + " - " + price.Label)))">@(price.Value + " - " + price.Label)</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

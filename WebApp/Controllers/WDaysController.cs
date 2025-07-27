@@ -100,6 +100,59 @@ namespace WebApp.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            if(id == null)
+            {
+                ModelState.AddModelError("", "WDay cannot be empty.");
+                return RedirectToAction("Index");
+            }
+
+            await PopulateViewBag();
+            WDay wday = await _httpClient.GetFromJsonAsync<WDay>(_baseUrl + $"wdays/wday/{id}");
+            return View(wday);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(WDay wday, int kidId, int priceId)
+        {
+            if (wday == null)
+            {
+                await PopulateViewBag();
+                ModelState.AddModelError("", "WDay cannot be empty.");
+                return View(wday);
+            }
+
+            // First, check if Kid exists
+            Kid? kid = await _httpClient.GetFromJsonAsync<Kid>(_baseUrl + "kids/kid/" + kidId);
+            if (kid == null)
+            {
+                ModelState.AddModelError("", "The selected kid does not exist");
+                return View();
+            }
+            wday.Kid = kid;
+
+            // Later, check if price exists
+            Price? price = await _httpClient.GetFromJsonAsync<Price>(_baseUrl + "price/price/" + priceId);
+            if (price == null)
+            {
+                ModelState.AddModelError("", "The selected price does not exist");
+                return View();
+            }
+            wday.Price = price;
+
+            HttpResponseMessage response = await _httpClient.PutAsJsonAsync(_baseUrl + "wdays", wday);
+            if (!response.IsSuccessStatusCode)
+            {
+                await PopulateViewBag();
+                ModelState.AddModelError("", $"There was an error while updating the WDay: {response.StatusCode}");
+                return View(wday);
+            }
+
+            return RedirectToAction("Index");
+        }
+
 
         private async Task PopulateViewBag()
         {

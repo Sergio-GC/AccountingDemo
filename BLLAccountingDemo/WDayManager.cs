@@ -64,9 +64,14 @@ namespace BLLAccountingDemo
                     .SetProperty(p => p.Date, updatedWday.Date)
                 );
 
-            EFAccounting.Entities.WDay wDay = await _context.Wdays.Where(w => w.Id == updatedWday.Id).SingleAsync();
-            wDay.Price = updatedWday.Price;
-            wDay.Kid = updatedWday.Kid;
+            EFAccounting.Entities.WDay ogwDay = await _context.Wdays.Where(w => w.Id == updatedWday.Id).SingleAsync();
+            ogwDay.Price = await _context.Prices
+                .Where(p => p.Id == updatedWday.Price.Id)
+                .SingleAsync();
+
+            ogwDay.Kid = await _context.Kids
+                .Where(k => k.Id == updatedWday.Kid.Id)
+                .SingleAsync();
 
             _context.SaveChanges();
         }
