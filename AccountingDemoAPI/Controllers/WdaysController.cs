@@ -75,9 +75,10 @@ namespace AccountingDemoAPI.Controllers
         }
 
         [HttpPut]
-        public void UpdateWDay(WDay wd)
+        public async Task<IActionResult> UpdateWDay(WDay wd)
         {
-            _manager.UpdateWDay(wd);
+            await _manager.UpdateWDay(wd);
+            return Ok();
         }
 
         [HttpPost]
