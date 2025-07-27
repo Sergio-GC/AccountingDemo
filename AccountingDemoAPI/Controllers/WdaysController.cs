@@ -87,10 +87,10 @@ namespace AccountingDemoAPI.Controllers
             _manager.AddWDay(wd);
         }
 
-        [HttpDelete]
-        public void DeleteWDay(WDay wd) 
+        [HttpDelete("delete/{id}")]
+        public void DeleteWDay(int id) 
         {
-            _manager.DeleteWDay(wd);
+            _manager.DeleteWDay(id);
         }
     }
 }

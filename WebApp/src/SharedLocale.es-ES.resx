@@ -120,11 +120,20 @@
   <data name="Accueil" xml:space="preserve">
     <value>Inicio</value>
   </data>
+  <data name="Are you sure you want to delete this WDay? This action cannot be undone." xml:space="preserve">
+    <value>Estás seguro de que quieres borrar esta entrada? Esta acción no se puede anular.</value>
+  </data>
   <data name="Arrival" xml:space="preserve">
     <value>Hora de llegada</value>
   </data>
   <data name="Calendar" xml:space="preserve">
     <value>Calendario</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="Confirm Delete" xml:space="preserve">
+    <value>Estás seguro?</value>
   </data>
   <data name="Create" xml:space="preserve">
     <value>Crear - es-ES</value>

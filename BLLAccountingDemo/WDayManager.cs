@@ -76,9 +76,9 @@ namespace BLLAccountingDemo
             _context.SaveChanges();
         }
 
-        public void DeleteWDay(WDay wDay)
+        public void DeleteWDay(int wdId)
         {
-            _context.Wdays.Where(w => w.Id == wDay.Id).ExecuteDelete();
+            _context.Wdays.Where(w => w.Id == wdId).ExecuteDelete();
         }
 
 

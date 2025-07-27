@@ -15,7 +15,7 @@ namespace WebApp
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddHttpClient<HomeController>();
+            builder.Services.AddHttpClient();
 
             // Add localization
             builder.Services.AddSingleton<LocaleService>();

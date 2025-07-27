@@ -153,6 +153,24 @@ namespace WebApp.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (id == null || id <= 0)
+            {
+                ModelState.AddModelError("", $"WDay id not valid: {id}");
+                return RedirectToAction("Index");
+            }
+
+            HttpResponseMessage response = await _httpClient.DeleteAsync(_baseUrl + $"wdays/delete/{id}");
+            if (!response.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError("", $"There was an error: {response.StatusCode}");
+            }
+
+            return RedirectToAction("Index");
+        }
+
 
         private async Task PopulateViewBag()
         {
