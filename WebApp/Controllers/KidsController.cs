@@ -29,5 +29,40 @@ namespace WebApp.Controllers
 
             return View(kids);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            await _PopulateViewBag();
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Kid k)
+        {
+            if (k == null)
+            {
+                await _PopulateViewBag();
+
+                ModelState.AddModelError("", "Kid cannot be null.");
+                return View(k);
+            }
+
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync(_baseUrl + "kids", k);
+            if (!response.IsSuccessStatusCode)
+            {
+                await _PopulateViewBag();
+
+                ModelState.AddModelError("", $"There was an error during the creation of the kid: {response.StatusCode}");
+                return View(k);
+            }
+
+            return RedirectToAction("Kids");
+        }
+
+        private async Task _PopulateViewBag()
+        {
+            ViewBag.kids = await _httpClient.GetFromJsonAsync<List<Kid>>(_baseUrl + "kids");
+        }
     }
 }
