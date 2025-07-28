@@ -44,10 +44,12 @@ namespace BLLAccountingDemo
                 .SetProperty(p => p.LastName, updatedKid.LastName)
                 .SetProperty(p => p.Name, updatedKid.Name)
                 .SetProperty(p => p.IsDeleted, updatedKid.IsDeleted)
-                .SetProperty(p => p.Siblings, updatedKid.Siblings)
                 );
 
-            //_context.SaveChanges();
+            EFAccounting.Entities.Kid kidEf = _context.Kids.Where(k => k.Id == updatedKid.Id).Single();
+            kidEf.Siblings = updatedKid.Siblings;
+
+            _context.SaveChanges();
         }
 
         public async Task RemoveKid(Kid kid, bool siblings)

@@ -1,6 +1,6 @@
 ﻿@using System.Globalization
 @using WebApp.src
-@inject LocaleService sharedLocale
+@inject LocaleService SharedLocalizer
 
 @model IEnumerable<DTO.Kid>
 
@@ -17,13 +17,13 @@
     <thead>
         <tr>
             <th>
-                @sharedLocale.GetLocalizedString(Html.DisplayNameFor(model => model.Name))
+                @SharedLocalizer.GetLocalizedString(Html.DisplayNameFor(model => model.Name))
             </th>
             <th>
-                @sharedLocale.GetLocalizedString(Html.DisplayNameFor(model => model.LastName))
+                @SharedLocalizer.GetLocalizedString(Html.DisplayNameFor(model => model.LastName))
             </th>
             <th>
-                @sharedLocale.GetLocalizedString(Html.DisplayNameFor(model => model.IsDeleted))
+                @SharedLocalizer.GetLocalizedString(Html.DisplayNameFor(model => model.IsDeleted))
             </th>
             <th></th>
         </tr>
@@ -41,9 +41,9 @@
                 @Html.DisplayFor(modelItem => item.IsDeleted)
             </td>
             <td>
-                @Html.ActionLink(sharedLocale.GetLocalizedString("Edit"), "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink(sharedLocale.GetLocalizedString("Details"), "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink(sharedLocale.GetLocalizedString("Delete"), "Delete", new { /* id=item.PrimaryKey */ })
+                <a asp-action="Edit" asp-route-id="@item.Id">@SharedLocalizer.GetLocalizedString("Edit")</a> |
+                @Html.ActionLink(SharedLocalizer.GetLocalizedString("Details"), "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink(SharedLocalizer.GetLocalizedString("Delete"), "Delete", new { /* id=item.PrimaryKey */ })
             </td>
         </tr>
 }

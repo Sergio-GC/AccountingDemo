@@ -1,5 +1,6 @@
 ﻿using DTO;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol;
 
 namespace WebApp.Controllers
 {
@@ -54,6 +55,42 @@ namespace WebApp.Controllers
                 await _PopulateViewBag();
 
                 ModelState.AddModelError("", $"There was an error during the creation of the kid: {response.StatusCode}");
+                return View(k);
+            }
+
+            return RedirectToAction("Kids");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int Id)
+        {
+            if(Id == null || Id <= 0)
+            {
+                ModelState.AddModelError("", "Id cannot be null");
+                return RedirectToAction("Kids");
+            }
+
+            Kid kid = await _httpClient.GetFromJsonAsync<Kid>(_baseUrl + $"kids/Kid/{Id}");
+            return View(kid);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Kid k)
+        {
+            if(k == null)
+            {
+                await _PopulateViewBag();
+                ModelState.AddModelError("", "Kid cannot be null");
+                return View(k);
+            }
+
+            HttpResponseMessage response = await _httpClient.PutAsJsonAsync(_baseUrl + "kids", k);
+            if (!response.IsSuccessStatusCode)
+            {
+                await _PopulateViewBag();
+                ModelState.AddModelError("", $"There was an unexpected error: {response.StatusCode}");
+
                 return View(k);
             }
 
