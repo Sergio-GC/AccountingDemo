@@ -45,10 +45,10 @@ namespace AccountingDemoAPI.Controllers
         }
 
         // POST: KidsController/Delete
-        [HttpDelete]
-        public void Delete(Kid kid, bool siblings)
+        [HttpDelete("delete/{Id}")]
+        public void Delete(int Id, [FromQuery] bool siblings)
         {
-            _kidManager.RemoveKid(kid, siblings);
+            _kidManager.RemoveKid(Id, siblings);
         }
     }
 }

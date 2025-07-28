@@ -52,15 +52,15 @@ namespace BLLAccountingDemo
             _context.SaveChanges();
         }
 
-        public async Task RemoveKid(Kid kid, bool siblings)
+        public async Task RemoveKid(int Id, bool siblings)
         {
-            Kid ogKid = _profile.Map<Kid>(_context.Kids.Where(k => k.Id == kid.Id).Single());
+            Kid ogKid = _profile.Map<Kid>(_context.Kids.Where(k => k.Id == Id).Single());
 
             if(siblings)
             {
                 // Get list of siblings
                 List<Kid> kidsSiblings = new();
-                List<int> fromIds = await _context.SiblingRelationships.Where(r => r.FromKidId == kid.Id).Select(s => s.ToKidId).ToListAsync();
+                List<int> fromIds = await _context.SiblingRelationships.Where(r => r.FromKidId == Id).Select(s => s.ToKidId).ToListAsync();
 
                 kidsSiblings = _profile.Map<List<Kid>>(await _context.Kids.Where(k => fromIds.Contains(k.Id)).ToListAsync()).ToList();
 
@@ -72,8 +72,8 @@ namespace BLLAccountingDemo
                 }
             }
 
-            bool deleted = kid.IsDeleted;
-            _context.Kids.Where(k => k.Id == kid.Id).ExecuteUpdate(u => u.SetProperty(p => p.IsDeleted, !deleted));
+            bool deleted = ogKid.IsDeleted;
+            _context.Kids.Where(k => k.Id == Id).ExecuteUpdate(u => u.SetProperty(p => p.IsDeleted, !deleted));
 
 
             await _context.SaveChangesAsync();

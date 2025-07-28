@@ -1,6 +1,5 @@
 ﻿using DTO;
 using Microsoft.AspNetCore.Mvc;
-using NuGet.Protocol;
 
 namespace WebApp.Controllers
 {
@@ -74,7 +73,6 @@ namespace WebApp.Controllers
             return View(kid);
         }
 
-
         [HttpPost]
         public async Task<IActionResult> Edit(Kid k)
         {
@@ -93,6 +91,23 @@ namespace WebApp.Controllers
 
                 return View(k);
             }
+
+            return RedirectToAction("Kids");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int Id)
+        {
+            Console.WriteLine($"Id: {Id}");
+            if(Id == null || Id <= 0)
+            {
+                ModelState.AddModelError("", "Id cannot be null");
+                return RedirectToAction("Kids");
+            }
+
+            HttpResponseMessage response = await _httpClient.DeleteAsync(_baseUrl + $"kids/delete/{Id}?siblings={false}");
+            if (!response.IsSuccessStatusCode)
+                ModelState.AddModelError("", $"Unexpected error: {response.StatusCode}");
 
             return RedirectToAction("Kids");
         }

@@ -42,8 +42,7 @@
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">@SharedLocalizer.GetLocalizedString("Edit")</a> |
-                @Html.ActionLink(SharedLocalizer.GetLocalizedString("Details"), "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink(SharedLocalizer.GetLocalizedString("Delete"), "Delete", new { /* id=item.PrimaryKey */ })
+                <a asp-action="Delete" asp-route-id="@item.Id">@SharedLocalizer.GetLocalizedString("Delete")</a>
             </td>
         </tr>
 }
