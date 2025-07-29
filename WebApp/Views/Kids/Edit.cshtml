@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Edit";
+    var allKids = ViewBag.kids as List<DTO.Kid>;
+    var availableKids = allKids.Where(k => k.Id != Model.Id).ToList();
 }
 
 <h1>Edit</h1>
@@ -27,6 +29,42 @@
                 <input asp-for="BirthDate" class="form-control" type="date" />
                 <span asp-validation-for="BirthDate" class="text-danger"></span>
             </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h4>Siblings</h4>
+                <button class="btn btn-success" type="button" onclick="addSiblingDropdown()">➕</button>
+            </div>
+
+            <div id="siblinglist">
+                <!-- List of already current siblings -->
+                @foreach (var sibling in Model.Siblings.Where(s => s.ToKidId != Model.Id))
+                {
+                    <div class="sibling-entry" style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
+                        <select name="SiblingIds" class="form-control sibling-dropdown">
+                            <option value="">--- Select a kid ---</option>
+                            @foreach (var kid in availableKids)
+                            {
+                                <!option value="@kid.Id" @(kid.Id == sibling.ToKidId ? "selected" : "")>@kid.Name</!option>
+                            }
+                        </select>
+                        <button type="button" class="btn btn-danger" onclick="removeDropdown(this)">❌</button>
+                    </div>
+                }
+            </div>
+
+            <div id="siblingDropdownTemplate" style="display: none;">
+                <div class="sibling-entry" style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
+                    <select name="SiblingIds" class="form-control sibling-dropdown">
+                        <option value="">--- Select a kid ---</option>
+                        @foreach (var kid in availableKids)
+                        {
+                            <option value="@kid.Id">@kid.Name</option>
+                        }
+                    </select>
+                    <button type="button" class="btn btn-danger" onclick="removeDropdown(this)">❌</button>
+                </div>
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -34,8 +72,19 @@
     </div>
 </div>
 
+<script>
+    function addSiblingDropdown() {
+        const template = document.getElementById("siblingDropdownTemplate").innerHTML;
+        document.getElementById("siblinglist").insertAdjacentHTML("beforeend", template);
+    }
+
+    function removeDropdown(button) {
+        button.closest(".sibling-entry").remove();
+    }
+</script>
+
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Kids">Back to List</a>
 </div>
 
 @section Scripts {

@@ -63,32 +63,44 @@ namespace WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int Id)
         {
-            if(Id == null || Id <= 0)
+            if (Id == null || Id <= 0)
             {
                 ModelState.AddModelError("", "Id cannot be null");
                 return RedirectToAction("Kids");
             }
+            await _PopulateViewBag();
 
             Kid kid = await _httpClient.GetFromJsonAsync<Kid>(_baseUrl + $"kids/Kid/{Id}");
             return View(kid);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Kid k)
+        public async Task<IActionResult> Edit(Kid k, List<int> SiblingIds)
         {
+            // 0. Initial check
             if(k == null)
             {
+                Console.WriteLine("Error at initial check");
                 await _PopulateViewBag();
                 ModelState.AddModelError("", "Kid cannot be null");
                 return View(k);
             }
 
-            HttpResponseMessage response = await _httpClient.PutAsJsonAsync(_baseUrl + "kids", k);
+            // 1. setup the list of ids for the sibling relationships and await for the response of the api
+            SiblingIds.Insert(0, k.Id);
+
+            HttpResponseMessage siblingsUpdateResponse = await _httpClient.PutAsJsonAsync($"{_baseUrl}kids/updateSiblings", SiblingIds);
+            if (!siblingsUpdateResponse.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError("", $"There was an unexpected error: {siblingsUpdateResponse.StatusCode}");
+                return View(k);
+            }
+
+            // 2. Update only the kid properties
+            HttpResponseMessage response = await _httpClient.PutAsJsonAsync($"{_baseUrl}kids/updateKid", k);
             if (!response.IsSuccessStatusCode)
             {
-                await _PopulateViewBag();
                 ModelState.AddModelError("", $"There was an unexpected error: {response.StatusCode}");
-
                 return View(k);
             }
 

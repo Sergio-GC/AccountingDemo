@@ -50,5 +50,17 @@ namespace AccountingDemoAPI.Controllers
         {
             _kidManager.RemoveKid(Id, siblings);
         }
+
+        [HttpPut("updateSiblings")]
+        public async Task UpdateSiblings(List<int> ids)
+        {
+            await _kidManager.UpdateSiblings(ids);
+        }
+
+        [HttpPut("updateKid")]
+        public void UpdateKid(Kid kid)
+        {
+            _kidManager.UpdateKid(kid);
+        }
     }
 }

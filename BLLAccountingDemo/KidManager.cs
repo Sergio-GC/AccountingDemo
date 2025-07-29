@@ -37,19 +37,50 @@ namespace BLLAccountingDemo
         public void UpdateKid(Kid kid)
         {
             EFAccounting.Entities.Kid updatedKid = _profile.Map<EFAccounting.Entities.Kid>(kid);
-            bool hasSiblings = updatedKid.Siblings.Count > 0;
 
             _context.Kids.Where(k => k.Id == updatedKid.Id).ExecuteUpdate(
                 p => p.SetProperty(p => p.BirthDate, updatedKid.BirthDate)
                 .SetProperty(p => p.LastName, updatedKid.LastName)
                 .SetProperty(p => p.Name, updatedKid.Name)
                 .SetProperty(p => p.IsDeleted, updatedKid.IsDeleted)
-                );
+            );
+        }
 
-            EFAccounting.Entities.Kid kidEf = _context.Kids.Where(k => k.Id == updatedKid.Id).Single();
-            kidEf.Siblings = updatedKid.Siblings;
+        public async Task UpdateSiblings(List<int> ids)
+        {
+            // 1. Clear the siblings of all the current siblings of the baseKid
+            EFAccounting.Entities.Kid kid = await _context.Kids.Where(k => k.Id == ids[0]).SingleAsync();
 
-            _context.SaveChanges();
+            // Only delete the sibling relationships if the kid already has them
+            if(kid.Siblings.Count() > 0)
+            {
+                await _context.SiblingRelationships.Where(sr => ids.Contains(sr.FromKidId) || ids.Contains(sr.ToKidId)).ExecuteDeleteAsync();
+                await _context.SaveChangesAsync();
+            }
+
+            // 2. Create the new relationships
+            await _UpdateRelationships(ids);
+            await _context.SaveChangesAsync();
+        }
+
+        private async Task _UpdateRelationships(List<int> siblingsIds)
+        {
+            if (siblingsIds.Count() < 2)
+                return;
+
+            // Prepare the data
+            int baseKidId = siblingsIds[0];
+            siblingsIds.RemoveAt(0);
+
+            // Create the relationships bidirectionnally
+            foreach (int id in siblingsIds)
+            {
+                _context.SiblingRelationships.Add(new EFAccounting.Entities.SiblingRelationship { FromKidId = baseKidId, ToKidId = id });
+                _context.SiblingRelationships.Add(new EFAccounting.Entities.SiblingRelationship { ToKidId = baseKidId, FromKidId = id });
+            }
+
+            // Repeat for the rest of siblings
+            await _UpdateRelationships(siblingsIds);
         }
 
         public async Task RemoveKid(int Id, bool siblings)
