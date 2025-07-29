@@ -1,5 +1,11 @@
 name: Deploy to Raspberry Pi
 
+# Temporarily disabled to focus on Docker build issues
+# on:
+#   push:
+#     branches: [ main, master, Testing ]
+#   workflow_dispatch: # Allows manual triggering
+
 on:
   push:
     branches: [ main, master, Testing ]
@@ -81,6 +87,12 @@ jobs:
           
           # Clean up old tar files
           rm -f api-image.tar webapp-image.tar
+
+    - name: Download Docker images
+      uses: actions/download-artifact@v4
+      with:
+        name: docker-images
+        path: ./
 
     - name: Upload images to Pi
       uses: appleboy/scp-action@v0.1.7
