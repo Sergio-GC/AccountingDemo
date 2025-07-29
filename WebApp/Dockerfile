@@ -10,7 +10,13 @@ COPY ["BLLAccountingDemo/BLLAccountingDemo.csproj", "BLLAccountingDemo/"]
 COPY ["DTO/DTO.csproj", "DTO/"]
 COPY ["EFAccounting/EFAccounting.csproj", "EFAccounting/"]
 RUN dotnet restore "WebApp/WebApp.csproj"
-COPY . .
+# Copy only the necessary source files, avoiding appsettings.json conflicts
+COPY ["WebApp/", "WebApp/"]
+COPY ["BLLAccountingDemo/", "BLLAccountingDemo/"]
+COPY ["DTO/", "DTO/"]
+COPY ["EFAccounting/Entities/", "EFAccounting/Entities/"]
+COPY ["EFAccounting/Context.cs", "EFAccounting/"]
+COPY ["EFAccounting/ContextFactory.cs", "EFAccounting/"]
 WORKDIR "/src/WebApp"
 RUN dotnet build "WebApp.csproj" -c Release -o /app/build
 
