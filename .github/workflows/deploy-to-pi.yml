@@ -88,19 +88,9 @@ jobs:
           # Clean up old tar files
           rm -f api-image.tar webapp-image.tar
 
-    - name: Download Docker images
-      uses: actions/download-artifact@v4
-      with:
-        name: docker-images
-        path: ./
-
-    - name: Extract Docker images
+    - name: Check available files
       run: |
         echo "Current directory contents:"
-        ls -la
-        echo "Extracting downloaded artifacts..."
-        unzip -o docker-images.zip
-        echo "After extraction:"
         ls -la
         echo "Checking for tar files:"
         ls -la *.tar || echo "No tar files found"
