@@ -10,13 +10,8 @@ COPY ["BLLAccountingDemo/BLLAccountingDemo.csproj", "BLLAccountingDemo/"]
 COPY ["DTO/DTO.csproj", "DTO/"]
 COPY ["EFAccounting/EFAccounting.csproj", "EFAccounting/"]
 RUN dotnet restore "AccountingDemoAPI/AccountingDemoAPI.csproj"
-# Copy only the necessary source files, avoiding appsettings.json conflicts
-COPY ["AccountingDemoAPI/", "AccountingDemoAPI/"]
-COPY ["BLLAccountingDemo/", "BLLAccountingDemo/"]
-COPY ["DTO/", "DTO/"]
-COPY ["EFAccounting/Entities/", "EFAccounting/Entities/"]
-COPY ["EFAccounting/Context.cs", "EFAccounting/"]
-COPY ["EFAccounting/ContextFactory.cs", "EFAccounting/"]
+# Copy all source files
+COPY . .
 WORKDIR "/src/AccountingDemoAPI"
 RUN dotnet build "AccountingDemoAPI.csproj" -c Release -o /app/build
 

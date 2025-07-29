@@ -42,6 +42,9 @@ Dockerfile*
 docker-compose*
 .dockerignore
 
+# Configuration files that might conflict
+EFAccounting/appsettings.json
+
 # GitHub Actions
 .github/
 
