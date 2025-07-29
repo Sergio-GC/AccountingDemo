@@ -94,6 +94,17 @@ jobs:
         name: docker-images
         path: ./
 
+    - name: Extract Docker images
+      run: |
+        echo "Current directory contents:"
+        ls -la
+        echo "Extracting downloaded artifacts..."
+        unzip -o docker-images.zip
+        echo "After extraction:"
+        ls -la
+        echo "Checking for tar files:"
+        ls -la *.tar || echo "No tar files found"
+
     - name: Upload images to Pi
       uses: appleboy/scp-action@v0.1.7
       with:

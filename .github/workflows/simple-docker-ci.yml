@@ -1,0 +1,78 @@
+name: Simple Docker CI
+
+on:
+  push:
+    branches: [ main, master, Testing ]
+  pull_request:
+    branches: [ main, master ]
+
+env:
+  DOTNET_VERSION: '8.0.x'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --no-restore
+
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+
+  build-docker-images:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    if: github.event_name == 'push'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build API Docker image
+      run: |
+        echo "Building API Docker image..."
+        docker build -f AccountingDemoAPI/Dockerfile -t accountingdemo-api:latest .
+        echo "API Docker image built successfully!"
+
+    - name: Build WebApp Docker image
+      run: |
+        echo "Building WebApp Docker image..."
+        docker build -f WebApp/Dockerfile -t accountingdemo-webapp:latest .
+        echo "WebApp Docker image built successfully!"
+
+    - name: List Docker images
+      run: |
+        echo "Available Docker images:"
+        docker images
+
+    - name: Save Docker images as tar files
+      run: |
+        echo "Saving Docker images..."
+        docker save accountingdemo-api:latest -o api-image.tar
+        docker save accountingdemo-webapp:latest -o webapp-image.tar
+        echo "Docker images saved successfully!"
+        ls -la *.tar
+
+    - name: Upload Docker images
+      uses: actions/upload-artifact@v4
+      with:
+        name: docker-images
+        path: |
+          api-image.tar
+          webapp-image.tar
+        retention-days: 1 
