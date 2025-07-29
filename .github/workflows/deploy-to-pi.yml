@@ -2,7 +2,7 @@ name: Deploy to Raspberry Pi
 
 on:
   push:
-    branches: [ main, master, Testing ]
+    branches: [ main, master]
   workflow_dispatch: # Allows manual triggering
 
 env:
@@ -33,7 +33,7 @@ jobs:
   deploy-to-pi:
     runs-on: ubuntu-latest
     needs: build-and-test
-    if: github.event_name == 'push' && (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/Testing'))
+    if: github.event_name == 'push' && (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'))
     
     steps:
     - name: Checkout code
@@ -52,7 +52,7 @@ jobs:
           cd ~/accountingdemo
           
           # Stop existing containers
-          docker-compose -f docker-compose.prod.yml down || true
+          docker compose down || true
           
           # Remove old images
           docker rmi accountingdemo-api:latest accountingdemo-webapp:latest || true
@@ -93,7 +93,7 @@ jobs:
           echo "WebApp image built successfully!"
           
           # Create production docker-compose if it doesn't exist
-          if [ ! -f docker-compose.prod.yml ]; then
+          if [ ! -f docker-compose.yml ]; then
             cat > docker-compose.yml << 'EOF'
           version: '3.8'
           
@@ -106,19 +106,21 @@ jobs:
                 - ASPNETCORE_ENVIRONMENT=Production
                 - ASPNETCORE_URLS=http://+:5000
               restart: unless-stopped
+              container_name: accounting-api
               networks:
                 - main
           
             webapp:
               image: accountingdemo-webapp:latest
               ports:
-                - "8080:8080"
+                - "8095:8080"
               environment:
                 - ASPNETCORE_ENVIRONMENT=Production
                 - ASPNETCORE_URLS=http://+:8080
               depends_on:
                 - api
               restart: unless-stopped
+              container_name: accounting-webapp
               networks:
                 - main
           
@@ -129,9 +131,9 @@ jobs:
           fi
           
           # Start containers
-          docker-compose -f docker-compose.yml up -d
+          docker compose up -d
           
           # Show status
-          docker-compose -f docker-compose.yml ps
+          docker status | grep accounting
           
           echo "Deployment completed successfully!" 
