@@ -101,17 +101,19 @@ jobs:
             api:
               image: accountingdemo-api:latest
               ports:
-                - "5000:80"
+                - "5000:5000"
               environment:
                 - ASPNETCORE_ENVIRONMENT=Production
+                - ASPNETCORE_URLS=http://+:5000
               restart: unless-stopped
           
             webapp:
               image: accountingdemo-webapp:latest
               ports:
-                - "8080:80"
+                - "8080:8080"
               environment:
                 - ASPNETCORE_ENVIRONMENT=Production
+                - ASPNETCORE_URLS=http://+:8080
               depends_on:
                 - api
               restart: unless-stopped
