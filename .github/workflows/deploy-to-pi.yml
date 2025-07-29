@@ -94,7 +94,7 @@ jobs:
           
           # Create production docker-compose if it doesn't exist
           if [ ! -f docker-compose.prod.yml ]; then
-            cat > docker-compose.prod.yml << 'EOF'
+            cat > docker-compose.yml << 'EOF'
           version: '3.8'
           
           services:
@@ -106,6 +106,8 @@ jobs:
                 - ASPNETCORE_ENVIRONMENT=Production
                 - ASPNETCORE_URLS=http://+:5000
               restart: unless-stopped
+              networks:
+                - main
           
             webapp:
               image: accountingdemo-webapp:latest
@@ -117,13 +119,19 @@ jobs:
               depends_on:
                 - api
               restart: unless-stopped
+              networks:
+                - main
+          
+          networks:
+            main:
+              external: true
           EOF
           fi
           
           # Start containers
-          docker-compose -f docker-compose.prod.yml up -d
+          docker-compose -f docker-compose.yml up -d
           
           # Show status
-          docker-compose -f docker-compose.prod.yml ps
+          docker-compose -f docker-compose.yml ps
           
           echo "Deployment completed successfully!" 
