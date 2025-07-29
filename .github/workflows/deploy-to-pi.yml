@@ -102,7 +102,17 @@ jobs:
         username: ${{ secrets.PI_USERNAME }}
         key: ${{ secrets.PI_SSH_KEY }}
         port: ${{ secrets.PI_PORT }}
-        source: "api-image.tar,webapp-image.tar"
+        source: "api-image.tar"
+        target: "~/accountingdemo/"
+
+    - name: Upload webapp image to Pi
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.PI_HOST }}
+        username: ${{ secrets.PI_USERNAME }}
+        key: ${{ secrets.PI_SSH_KEY }}
+        port: ${{ secrets.PI_PORT }}
+        source: "webapp-image.tar"
         target: "~/accountingdemo/"
 
     - name: Load and start containers on Pi
