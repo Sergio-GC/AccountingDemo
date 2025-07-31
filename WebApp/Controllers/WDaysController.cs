@@ -1,5 +1,6 @@
 ﻿using DTO;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using System.Text;
 using System.Text.Json;
 
@@ -204,6 +205,52 @@ namespace WebApp.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> InvoiceSummary()
+        {
+            List<Kid> kids = await _httpClient.GetFromJsonAsync<List<Kid>>($"{_baseUrl}kids");
+            ViewBag.kids = kids;
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> InvoiceSummary(InvoiceFormData formData)
+        {
+            #region Coherence checks
+            if (formData == null)
+            {
+                ModelState.AddModelError("", "Unexpected error");
+                return View(formData);
+            }
+
+            if (formData.KidSelectinoId == null || formData.KidSelectinoId == 0)
+            {
+                ModelState.AddModelError("", "You must select a kid.");
+                return View(formData);
+            }
+
+            if (DateOnly.Parse(formData.PeriodFrom) > DateOnly.Parse(formData.PeriodTo))
+            {
+                ModelState.AddModelError("", "There is an incoherence in the dates");
+                return View(formData);
+            }
+            #endregion
+
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync($"{_baseUrl}wdays/invoiceSummary", formData);
+            if (!response.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError("", "Unexpected error, contact system administrator to get more details.");
+                return View(formData);
+            }
+
+            ViewBag.periodStart = DateOnly.Parse(formData.PeriodFrom);
+            ViewBag.periodEnd = DateOnly.Parse(formData.PeriodTo);
+
+            List<InvoiceSummary> summary = await response.Content.ReadFromJsonAsync<List<InvoiceSummary>>();
+            return View("Invoice", summary);
         }
 
 

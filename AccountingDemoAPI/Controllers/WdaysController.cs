@@ -98,5 +98,12 @@ namespace AccountingDemoAPI.Controllers
         {
             _manager.AddBulkWDays(submission);
         }
+
+        [HttpPost("invoiceSummary")]
+        public async Task<IActionResult> GetInvoiceSummary(InvoiceFormData formData)
+        {
+            List<InvoiceSummary> summary = await _manager.GetSummary(formData);
+            return Ok(summary);
+        }
     }
 }

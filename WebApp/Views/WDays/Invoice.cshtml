@@ -1,0 +1,65 @@
+﻿@model IEnumerable<DTO.InvoiceSummary>
+
+@{
+    ViewData["Title"] = "Invoice";
+}
+
+<h1 class="no-print">View</h1>
+
+<p class="mb-3">Period from @(ViewBag.periodStart) to @(ViewBag.periodEnd)</p>
+
+<table class="mb-5">
+    <tr>
+        <td>
+            Total hours: @(Model.First().TotalHours)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Amount: @(Model.First().TotalAmount)
+        </td>
+    </tr>
+</table>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.KidName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Label)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Hours)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.KidName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Label)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Hours)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

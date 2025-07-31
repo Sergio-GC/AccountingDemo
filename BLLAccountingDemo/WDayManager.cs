@@ -107,6 +107,77 @@ namespace BLLAccountingDemo
             _context.Wdays.Where(w => w.Id == wdId).ExecuteDelete();
         }
 
+        public async Task<List<InvoiceSummary>> GetSummary(InvoiceFormData formData)
+        {
+            List<int> ids = new();
+            if(formData.KidSelectinoId == -1)
+            {
+                // Get the Id of all kids
+                ids.AddRange(_context.Kids.Select(k => k.Id).ToList());
+            }
+            else
+            {
+                // Get the Ids of the kid's siblings
+                if (!formData.WithSiblings.Equals("false", StringComparison.OrdinalIgnoreCase))
+                    ids.AddRange(_context.SiblingRelationships.Where(s => s.FromKidId == formData.KidSelectinoId).Select(sr => sr.ToKidId).ToList());
+                
+                ids.Add(formData.KidSelectinoId);
+            }
+
+            DateOnly startDate = DateOnly.Parse(formData.PeriodFrom);
+            DateOnly endDate = DateOnly.Parse(formData.PeriodTo);
+
+            List<EFAccounting.Entities.WDay> wdays = 
+                _context.Wdays.Where(wd => ids.Contains(wd.Kid.Id) && wd.Date >= startDate && wd.Date <= endDate).ToList();
+
+            var groupedWdays = wdays.GroupBy(gb => new { gb.Date, gb.Kid });
+
+            List<InvoiceSummary> summary = new();
+            float totalAmounts = 0f;
+            float totalHours = 0f;
+
+            foreach(var group in groupedWdays.OrderBy(o => o.Key.Date).ThenBy(tb => tb.Key.Kid.Name))
+            {
+                string label = "";
+                float hoursForKid = 0f;
+                float amountForKid = 0f;
+
+                foreach (var item in group)
+                {
+                    label += $"from {item.Arrival:HH\\:mm} to {item.Departure:HH\\:mm} ";
+
+                    TimeSpan time = (TimeSpan)(item.Departure - item.Arrival);
+                    float timeHours = (float)time.TotalHours;
+
+                    hoursForKid += timeHours;
+                    amountForKid += timeHours * item.Price.Value;
+                }
+
+                totalHours += hoursForKid;
+                totalAmounts += amountForKid;
+
+                summary.Add(new InvoiceSummary
+                {
+                    Label = label,
+                    Hours = hoursForKid,
+                    Amount = amountForKid,
+                    Date = group.Key.Date,
+                    KidName = group.Key.Kid.Name,
+                    TotalAmount = 0f, // Temp 0 value, will be updated at the end
+                    TotalHours = 0f // Temp 0 value, will be updated at the end
+                });
+            }
+
+            // Update the totals
+            foreach (var sum in summary)
+            {
+                sum.TotalAmount = totalAmounts;
+                sum.TotalHours = totalHours;
+            }
+
+            return summary;
+        }
+
 
         public float CalculateAmount(DateOnly StartDate, DateOnly EndDate, List<Kid> Kids)
         {
