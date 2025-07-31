@@ -54,7 +54,7 @@ jobs:
           docker compose down || true
           
           # Remove old images
-          docker rmi accountingdemo-api:latest accountingdemo-webapp:latest || true
+          docker rmi accounting-api:latest accounting-webapp:latest || true
           
           # Clean up old files
           rm -rf *
@@ -84,11 +84,11 @@ jobs:
           echo "Building Docker images on Pi..."
           
           # Build API image
-          docker build -f AccountingDemoAPI/Dockerfile -t accountingdemo-api:latest .
+          docker build -f AccountingDemoAPI/Dockerfile -t accounting-api:latest .
           echo "API image built successfully!"
           
           # Build WebApp image
-          docker build -f WebApp/Dockerfile -t accountingdemo-webapp:latest .
+          docker build -f WebApp/Dockerfile -t accounting-webapp:latest .
           echo "WebApp image built successfully!"
           
           # Create production docker-compose if it doesn't exist
@@ -98,7 +98,7 @@ jobs:
           
           services:
             api:
-              image: accountingdemo-api:latest
+              image: accounting-api:latest
               ports:
                 - "5000:5000"
               environment:
@@ -110,7 +110,7 @@ jobs:
                 - main
           
             webapp:
-              image: accountingdemo-webapp:latest
+              image: accounting-webapp:latest
               ports:
                 - "8095:8080"
               environment:
@@ -133,6 +133,6 @@ jobs:
           docker compose up -d
           
           # Show status
-          docker status | grep accounting
+          docker ps -a | grep accounting
           
           echo "Deployment completed successfully!" 
