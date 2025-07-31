@@ -54,6 +54,7 @@ jobs:
       with:
         context: .
         file: ./AccountingDemoAPI/Dockerfile
+        platforms: linux/arm64
         push: true
         tags: ${{ env.DOCKER_REGISTRY }}/accounting-api:${{ env.IMAGE_TAG }},${{ env.DOCKER_REGISTRY }}/accounting-api:latest
         cache-from: type=gha
@@ -64,6 +65,7 @@ jobs:
       with:
         context: .
         file: ./WebApp/Dockerfile
+        platforms: linux/arm64
         push: true
         tags: ${{ env.DOCKER_REGISTRY }}/accounting-webapp:${{ env.IMAGE_TAG }},${{ env.DOCKER_REGISTRY }}/accounting-webapp:latest
         cache-from: type=gha
