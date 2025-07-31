@@ -101,7 +101,6 @@
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">@SharedLocalizer.GetLocalizedString("Edit")</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">@SharedLocalizer.GetLocalizedString("Details")</a> |
                 <form asp-action="Delete" method="post" style="display: inline;">
                 <input type="hidden" name="id" value="@item.Id" />
                 <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#deleteModal-@item.Id">
