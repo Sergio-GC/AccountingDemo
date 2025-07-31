@@ -2,6 +2,7 @@
 using EFAccounting;
 using DTO;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace BLLAccountingDemo
 {
@@ -50,6 +51,31 @@ namespace BLLAccountingDemo
             _context.Attach(wDay.Price);
 
             _context.Wdays.Add(wDay);
+            _context.SaveChanges();
+        }
+
+        public void AddBulkWDays(WDaySubmission submission)
+        {
+            List<EFAccounting.Entities.Kid> kids = _context.Kids.Where(k => submission.KidsIds.Contains(k.Id)).ToList();
+            EFAccounting.Entities.Price price = _context.Prices.Where(p => p.Id == submission.PriceId).Single();
+
+            List<EFAccounting.Entities.WDay> wdays = new();
+            foreach(var kid in kids)
+            {
+                for(int i = 0; i < submission.Arrivals.Count; i++)
+                {
+                    wdays.Add(new EFAccounting.Entities.WDay
+                    {
+                        Kid = kid,
+                        Price = price,
+                        Arrival = submission.Arrivals[i],
+                        Departure = submission.Departures[i],
+                        Date = submission.Date
+                    });
+                }
+            }
+
+            _context.Wdays.AddRange(wdays);
             _context.SaveChanges();
         }
 

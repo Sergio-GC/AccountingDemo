@@ -92,5 +92,11 @@ namespace AccountingDemoAPI.Controllers
         {
             _manager.DeleteWDay(id);
         }
+
+        [HttpPost("bulkCreate")]
+        public void BulkCreateWDays(WDaySubmission submission)
+        {
+            _manager.AddBulkWDays(submission);
+        }
     }
 }

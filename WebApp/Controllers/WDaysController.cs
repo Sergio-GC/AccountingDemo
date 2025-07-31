@@ -39,7 +39,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(WDay wd, int kidId, int priceId)
+        public async Task<IActionResult> Create(WDay wd, int kidId, int priceId, string siblingsSwitch, List<string> arrivalHours, List<string> departureHours)
         {
             await PopulateViewBag();
 
@@ -67,21 +67,56 @@ namespace WebApp.Controllers
                 if(wd.Arrival >= wd.Departure)
                 {
                     ModelState.AddModelError("", "The arrival hour cannot be after the departure hour.");
-                    return View("Index");
+                    return View();
                 }
             }
 
-            // Finally, prepare the API request and send it to create the WDay
-            string jsonWDay = JsonSerializer.Serialize(wd);
-            StringContent content = new StringContent(jsonWDay, Encoding.UTF8, "application/json");
+            List<TimeOnly> arrivals = new();
+            List<TimeOnly> departures = new();
 
-            HttpResponseMessage response = await _httpClient.PostAsync(_baseUrl + "Wdays", content);
-            if (!response.IsSuccessStatusCode)
+            // Check that the arrival hours are always smaller than the departure hours
+            for (int i = 0; i < arrivalHours.Count; i++)
             {
-                ModelState.AddModelError("", $"Error while creating a new WDay: {response.StatusCode}");
-                return View();
+                arrivals.Add(TimeOnly.Parse(arrivalHours[i]));
+                departures.Add(TimeOnly.Parse(departureHours[i]));
+
+                if (departures[i] <= arrivals[i])
+                {
+                    ModelState.AddModelError("", "There cannot be a departure hour lower than the arrival hour.");
+                    return View();
+                }
             }
 
+            // Check if the siblings are selected and add them to a new Kids list
+            List<int> kidIds = new() { kid.Id };
+            if (siblingsSwitch.Equals("on", StringComparison.OrdinalIgnoreCase))
+            {
+                List<SiblingRelationship> relationships = kid.Siblings.ToList();
+                foreach (SiblingRelationship relationship in relationships)
+                {
+                    if(relationship.ToKidId == kid.Id)
+                        kidIds.Add(relationship.FromKidId);
+                    else
+                        kidIds.Add(relationship.ToKidId);
+                }
+                    
+            }
+
+            // Now that we have the arrivalHours, departureHours and the list of kids, send the api request with a WDaySubmission object
+            WDaySubmission submission = new WDaySubmission { 
+                Arrivals = arrivals, 
+                Departures = departures, 
+                Date = wd.Date, 
+                KidsIds = kidIds, 
+                PriceId = wd.Price.Id 
+            };
+
+            HttpResponseMessage respons = await _httpClient.PostAsJsonAsync($"{_baseUrl}wdays/bulkCreate", submission);
+            if (!respons.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError("", $"There was an error: {respons.StatusCode}");
+                return View();
+            }
             return RedirectToAction("Index");
         }
 
