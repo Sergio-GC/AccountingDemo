@@ -2,64 +2,116 @@
 
 @{
     ViewData["Title"] = "Invoice";
+    
+    var kidnames = Model.Select(m => m.KidName).Distinct().ToList();
+    string downloadName = "";
+    foreach (var kidname in kidnames)
+    {
+        downloadName += kidname + ", ";
+    }
+    downloadName = downloadName.Remove(downloadName.Length - 2);
+
+    string period = ViewBag.periodStart + " - " + ViewBag.periodEnd;
 }
 
 <h1 class="no-print">View</h1>
 
-<p class="mb-3">Period from @(ViewBag.periodStart) to @(ViewBag.periodEnd)</p>
+<p class="mb-3">@period</p>
 
-<table class="mb-5">
-    <tr>
-        <td>
-            Total hours: @(Model.First().TotalHours)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Amount: @(Model.First().TotalAmount)
-        </td>
-    </tr>
-</table>
+<div id="content">
+    <div class="d-flex justify-content-between align-items-start mb-3">
+        <!-- Left: Table -->
+        <table class="mb-0">
+            <tr>
+                <td>Total hours: @(Model.First().TotalHours)</td>
+            </tr>
+            <tr>
+                <td>Amount: @(Model.First().TotalAmount) CHF</td>
+            </tr>
+        </table>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.KidName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Label)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Hours)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Amount)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.KidName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Label)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Hours)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Amount)
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        <!-- Right: Buttons -->
+        <div class="d-flex gap-2 no-print">
+            <button class="btn btn-sm btn-success square-btn no-print" type="button" id="printIcon" onclick="printSummary()">
+                <i class="fa-solid fa-print"></i>
+            </button>
+            <button class="btn btn-sm btn-primary square-btn no-print" type="button" id="downloadButton" onclick="downloadButton()">
+                <i class="fa-solid fa-download"></i>
+            </button>
+        </div>
+    </div>
+
+
+    <table class="table table-sm table-borderless">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.KidName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Label)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Hours)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Amount)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.KidName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Label)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Hours)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Amount)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function printSummary(){
+        window.print();
+    }
+    function downloadButton(){
+        // Hide all elements with the "no-print" class
+        const elementsToHide = document.querySelectorAll('.no-print');
+        elementsToHide.forEach(el => el.style.display = 'none');
+
+        // Download document and then display again the hidden elements
+        const element = document.getElementById('content');
+        const options = {
+            margin: [10, 10],
+            image: {
+                type: 'jpeg',
+                quality: 0.98
+            },
+            filename: "@(period) - @(downloadName) - Invoice.pdf",
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+        html2pdf().from(element).set(options).save().then(() => {
+            elementsToHide.forEach(el => el.style.display = '');
+        });
+
+
+    }
+</script>
