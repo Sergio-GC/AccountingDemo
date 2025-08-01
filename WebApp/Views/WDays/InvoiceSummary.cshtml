@@ -1,13 +1,14 @@
 ﻿@model DTO.InvoiceFormData
 @using DTO
+@using WebApp.src
+
+@inject LocaleService ls
 
 @{
     ViewData["Title"] = "InvoiceSummary";
 }
 
-<h1>InvoiceSummary</h1>
-
-<h4>InvoiceFormData</h4>
+<h1>@ls.GetLocalizedString("InvoiceSummary")</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -16,7 +17,7 @@
             <div class="form-row d-flex mb-2">
                 <div class="form-group col-5 me-1">
                     <select asp-for="KidSelectinoId" class="form-control">
-                        <option value="-1">--- All kids ---</option>
+                        <option value="-1">--- @(ls.GetLocalizedString("All kids")) ---</option>
                         @{
                             foreach (Kid kid in ViewBag.kids)
                             {
@@ -26,22 +27,22 @@
                     </select>
                 </div>
 
-                <div class="form-check form-switch mt-2 col-4 ms-2 mb-2">
-                    <label asp-for="WithSiblings" class="control-label"></label>
-                    <input class="form-check-input" type="checkbox" asp-for="WithSiblings">
+                <div class="form-check form-switch mt-2 col-8 ms-2 mb-2">
+                    <label asp-for="WithSiblings" class="control-label">@ls.GetLocalizedString("WithSiblings")</label>
+                    <input class="form-check-input" type="checkbox" asp-for="WithSiblings" checked>
                     <span asp-validation-for="WithSiblings" class="text-danger"></span>
                 </div>
             </div>
 
             <div class="form-row d-flex mb-3">
                 <div class="form-group col-5 me-2">
-                    <label asp-for="PeriodFrom" class="control-label"></label>
+                    <label asp-for="PeriodFrom" class="control-label">@ls.GetLocalizedString("PeriodStart")</label>
                     <input asp-for="PeriodFrom" class="form-control" type="date" />
                     <span asp-validation-for="PeriodFrom" class="text-danger"></span>
                 </div>
 
                 <div class="form-group col-5">
-                    <label asp-for="PeriodTo" class="control-label"></label>
+                    <label asp-for="PeriodTo" class="control-label">@ls.GetLocalizedString("PeriodEnd")</label>
                     <input asp-for="PeriodTo" class="form-control" type="date" />
                     <span asp-validation-for="PeriodTo" class="text-danger"></span>
                 </div>
@@ -49,14 +50,14 @@
 
 
             <div class="form-group">
-                <input type="submit" value="Calculate" class="btn btn-primary" />
+                <input type="submit" value="@ls.GetLocalizedString("Calculate")" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" asp-controller="WDays">@ls.GetLocalizedString("BackToList")</a>
 </div>
 
 @section Scripts {

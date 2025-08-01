@@ -120,6 +120,9 @@
   <data name="Accueil" xml:space="preserve">
     <value>Inicio</value>
   </data>
+  <data name="All kids" xml:space="preserve">
+    <value>Todos los niños</value>
+  </data>
   <data name="Amount" xml:space="preserve">
     <value>Total</value>
   </data>
@@ -128,6 +131,12 @@
   </data>
   <data name="Arrival" xml:space="preserve">
     <value>Hora de llegada</value>
+  </data>
+  <data name="BackToList" xml:space="preserve">
+    <value>Volver al inicio</value>
+  </data>
+  <data name="Calculate" xml:space="preserve">
+    <value>Calcular</value>
   </data>
   <data name="Calendar" xml:space="preserve">
     <value>Calendario</value>
@@ -162,6 +171,9 @@
   <data name="Hours" xml:space="preserve">
     <value>Horas</value>
   </data>
+  <data name="InvoiceSummary" xml:space="preserve">
+    <value>Calcular factura</value>
+  </data>
   <data name="IsDeleted" xml:space="preserve">
     <value>Anulado</value>
   </data>
@@ -183,6 +195,12 @@
   <data name="Name" xml:space="preserve">
     <value>Nombre</value>
   </data>
+  <data name="PeriodEnd" xml:space="preserve">
+    <value>Hasta</value>
+  </data>
+  <data name="PeriodStart" xml:space="preserve">
+    <value>Desde</value>
+  </data>
   <data name="Price" xml:space="preserve">
     <value>Precio</value>
   </data>
@@ -194,5 +212,8 @@
   </data>
   <data name="updateDeparture" xml:space="preserve">
     <value>Actualizar hora de salida</value>
+  </data>
+  <data name="WithSiblings" xml:space="preserve">
+    <value>Incluir hermanos</value>
   </data>
 </root>
