@@ -120,6 +120,9 @@
   <data name="Accueil" xml:space="preserve">
     <value>Accueil</value>
   </data>
+  <data name="Amount" xml:space="preserve">
+    <value>Total</value>
+  </data>
   <data name="Are you sure you want to delete this WDay? This action cannot be undone." xml:space="preserve">
     <value>Êtes-vous sûr de vouloir effacer cette entrée? Cette action ne peut pas être annulée.</value>
   </data>
@@ -156,14 +159,23 @@
   <data name="Home" xml:space="preserve">
     <value>Accueil</value>
   </data>
+  <data name="Hours" xml:space="preserve">
+    <value>Heures</value>
+  </data>
   <data name="IsDeleted" xml:space="preserve">
     <value>Annulé</value>
   </data>
   <data name="Kid" xml:space="preserve">
     <value>Enfant</value>
   </data>
+  <data name="KidName" xml:space="preserve">
+    <value>Nom</value>
+  </data>
   <data name="Kids" xml:space="preserve">
     <value>Enfants</value>
+  </data>
+  <data name="Label" xml:space="preserve">
+    <value>Détail</value>
   </data>
   <data name="LastName" xml:space="preserve">
     <value>Nom</value>
@@ -173,6 +185,9 @@
   </data>
   <data name="Price" xml:space="preserve">
     <value>Prix</value>
+  </data>
+  <data name="Total hours" xml:space="preserve">
+    <value>Nombre d'heures</value>
   </data>
   <data name="updateArrival" xml:space="preserve">
     <value>Mettre à jour l'heure d'arrivée</value>

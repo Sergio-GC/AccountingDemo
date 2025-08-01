@@ -121,6 +121,9 @@
     <value>Accueil</value>
     <comment>TODO CHANGE</comment>
   </data>
+  <data name="Amount" xml:space="preserve">
+    <value>Amount</value>
+  </data>
   <data name="Are you sure you want to delete this WDay? This action cannot be undone." xml:space="preserve">
     <value>Are you sure you want to delete this WDay? This action cannot be undone.</value>
   </data>
@@ -157,14 +160,23 @@
   <data name="Home" xml:space="preserve">
     <value>Home</value>
   </data>
+  <data name="Hours" xml:space="preserve">
+    <value>Hours</value>
+  </data>
   <data name="IsDeleted" xml:space="preserve">
     <value>Deleted</value>
   </data>
   <data name="Kid" xml:space="preserve">
     <value>Kid</value>
   </data>
+  <data name="KidName" xml:space="preserve">
+    <value>KidName</value>
+  </data>
   <data name="Kids" xml:space="preserve">
     <value>Kids</value>
+  </data>
+  <data name="Label" xml:space="preserve">
+    <value>Label</value>
   </data>
   <data name="LastName" xml:space="preserve">
     <value>Lastname</value>
@@ -174,6 +186,9 @@
   </data>
   <data name="Price" xml:space="preserve">
     <value>Price</value>
+  </data>
+  <data name="Total hours" xml:space="preserve">
+    <value>Total hours</value>
   </data>
   <data name="updateArrival" xml:space="preserve">
     <value>Update arrival time</value>

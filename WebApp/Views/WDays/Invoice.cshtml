@@ -1,4 +1,7 @@
 ﻿@model IEnumerable<DTO.InvoiceSummary>
+@using WebApp.src
+
+@inject LocaleService SharedLocale
 
 @{
     ViewData["Title"] = "Invoice";
@@ -13,20 +16,17 @@
 
     string period = ViewBag.periodStart + " - " + ViewBag.periodEnd;
 }
-
-<h1 class="no-print">View</h1>
-
-<p class="mb-3">@period</p>
+<h3 class="mb-3 mt-4">@period</h3>
 
 <div id="content">
-    <div class="d-flex justify-content-between align-items-start mb-3">
+    <div class="d-flex justify-content-between align-items-start mb-5">
         <!-- Left: Table -->
-        <table class="mb-0">
+        <table class="mb-0 table table-sm table-borderless" style="font-size: 1.1em">
             <tr>
-                <td>Total hours: @(Model.First().TotalHours)</td>
+                <td style="padding: 2px 0; line-height: 1.1;">@(SharedLocale.GetLocalizedString("Total hours")): &#9;@(Model.First().TotalHours)</td>
             </tr>
             <tr>
-                <td>Amount: @(Model.First().TotalAmount) CHF</td>
+                <td style="padding: 2px 0; line-height: 1.1;">@(SharedLocale.GetLocalizedString("Amount")): &#9;@(Model.First().TotalAmount) CHF</td>
             </tr>
         </table>
 
@@ -46,19 +46,19 @@
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Date)
+                    @SharedLocale.GetLocalizedString("Date")
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.KidName)
+                    @SharedLocale.GetLocalizedString("KidName")
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Label)
+                    @SharedLocale.GetLocalizedString("Label")
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Hours)
+                    @SharedLocale.GetLocalizedString("Hours")
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Amount)
+                    @SharedLocale.GetLocalizedString("Amount")
                 </th>
             </tr>
         </thead>
@@ -111,7 +111,5 @@
         html2pdf().from(element).set(options).save().then(() => {
             elementsToHide.forEach(el => el.style.display = '');
         });
-
-
     }
 </script>
