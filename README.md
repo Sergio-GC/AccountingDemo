@@ -1,5 +1,7 @@
 # Accounting Demo App
-This webapp was made for personal use. It serves to connect to a mysql database and manage a kindergarten-like structure. 
+This webapp was made for personal use. It serves to connect to a mysql database and manage a kindergarten-like structure. <br/><br/>
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/Sergio-GC/AccountingDemo/.github%2Fworkflows%2Fdeploy-to-pi.yml)
+![Static Badge](https://img.shields.io/badge/License-MIT-yellow)
 
 ## Main features
 - Manage list of kids (create, list, update and delete kids from the database)
@@ -11,6 +13,20 @@ This webapp was made for personal use. It serves to connect to a mysql database 
 - WebApp translated to English, French and Spanish
 
 ## Screenshots
+- Translations
+![Translations](/Assets/translations.gif)
+
+- Creation of a new working day
+![Working day creation](/Assets/createWD.gif)
+
+- Creation of a new kid
+![Kid creation](/Assets/kidCreation.gif)
+
+- Management of sibling relationships
+![Siblings management](/Assets/siblingsManagement.gif)
+
+- Generation of invoices
+![Facturation](/Assets/facturationPreview.gif)
 
 ## Architecture
 This repository contains several projects (Visual Studio).
@@ -25,7 +41,6 @@ This repository contains several projects (Visual Studio).
 - Docker (Docker compose)
 - Github Actions
 - JavaScript (no framework used, WebApp views created in .cshtml files, js added to manage adding new fields)
-- 
 
 The WebApp follows the MVC architecture, even though the models come directly from the DTO, which explains the lack of models inside the project.
 
