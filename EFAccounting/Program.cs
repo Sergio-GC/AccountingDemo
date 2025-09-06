@@ -8,10 +8,15 @@ namespace EFAccounting
     {
         static void Main(string[] args)
         {
+            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
+              ?? Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT")
+              ?? "Production";
+
             // Load connection string from appsettings.json
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables()
                 .Build();
 
             var connectionString = config.GetConnectionString("DefaultDb");

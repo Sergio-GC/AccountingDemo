@@ -13,6 +13,9 @@ env:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    env:
+        ConnectionStrings__DefaultDb: ${{ secrets.DB_CONNECTION_STRING }}
+        ASPNETCORE_ENVIRONMENT: CI
     
     steps:
     - name: Checkout code
@@ -35,6 +38,9 @@ jobs:
   build-and-push-images:
     runs-on: ubuntu-latest
     needs: build-and-test
+    env:
+        ConnectionStrings__DefaultDb: ${{ secrets.DB_CONNECTION_STRING }}
+        ASPNETCORE_ENVIRONMENT: CI
     
     steps:
     - name: Checkout code
@@ -99,6 +105,10 @@ jobs:
           echo "Pulling latest Docker images..."
           docker pull ${{ env.DOCKER_REGISTRY }}/accounting-api:latest
           docker pull ${{ env.DOCKER_REGISTRY }}/accounting-webapp:latest
+
+          # Create a .env file
+          install -m 600 /dev/null .env
+          echo "DB_CONNECTION_STRING=${{ secrets.DB_CONNECTION_STRING }}" > .env
           
           # Create production docker-compose if it doesn't exist
           if [ ! -f docker-compose.yml ]; then
@@ -113,6 +123,7 @@ jobs:
               environment:
                 - ASPNETCORE_ENVIRONMENT=Production
                 - ASPNETCORE_URLS=http://+:5000
+                - ConnectionStrings__DefaultDb=${DB_CONNECTION_STRING}
               restart: unless-stopped
               container_name: accounting-api
               networks:
