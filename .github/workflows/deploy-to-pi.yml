@@ -124,6 +124,7 @@ jobs:
                 - ASPNETCORE_ENVIRONMENT=Production
                 - ASPNETCORE_URLS=http://+:5000
                 - ConnectionStrings__DefaultDb=${DB_CONNECTION_STRING}
+                - TZ=Europe/Zurich
               restart: unless-stopped
               container_name: accounting-api
               networks:
