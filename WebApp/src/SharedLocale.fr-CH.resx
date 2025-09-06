@@ -183,6 +183,9 @@
   <data name="Hours" xml:space="preserve">
     <value>Heures</value>
   </data>
+  <data name="Invoice" xml:space="preserve">
+    <value>Facture</value>
+  </data>
   <data name="InvoiceSummary" xml:space="preserve">
     <value>Calculer facture</value>
   </data>
@@ -236,6 +239,9 @@
   </data>
   <data name="updateDeparture" xml:space="preserve">
     <value>Mettre à jour l'heure de départ</value>
+  </data>
+  <data name="WDay" xml:space="preserve">
+    <value>Jour ouvrable</value>
   </data>
   <data name="WithSiblings" xml:space="preserve">
     <value>Inclure frères et soeurs</value>

@@ -4,10 +4,10 @@
 @inject LocaleService SharedLocalizer
 
 @{
-    ViewData["Title"] = "Working Days";
+    ViewData["Title"] = SharedLocalizer.GetLocalizedString("WDay");
 }
 
-<h1>Working days</h1>
+<h1>@SharedLocalizer.GetLocalizedString("WDay")</h1>
 
 <p>
     <a asp-action="Create">@SharedLocalizer.GetLocalizedString("Create")</a>

@@ -5,7 +5,7 @@
 @inject LocaleService ls
 
 @{
-    ViewData["Title"] = "InvoiceSummary";
+    ViewData["Title"] = ls.GetLocalizedString("InvoiceSummary");
 }
 
 <h1>@ls.GetLocalizedString("InvoiceSummary")</h1>

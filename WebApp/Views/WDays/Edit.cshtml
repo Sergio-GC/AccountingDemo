@@ -1,12 +1,15 @@
-﻿@model DTO.WDay
+﻿@using WebApp.src
+@model DTO.WDay
+
+@inject LocaleService translate
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = translate.GetLocalizedString("Edit");
 }
 
-<h1>Edit</h1>
+<h1>@translate.GetLocalizedString("Edit")</h1>
 
-<h4>WDay Working Day</h4>
+<h4>@translate.GetLocalizedString("WDay")</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -36,9 +39,9 @@
             </div>
 
             <div class="form-group">
-                <label for="KidId" class="control-label">Kid</label>
+                <label for="KidId" class="control-label">@translate.GetLocalizedString("Kid")</label>
                 <select class="form-control" name="KidId" id="KidId">
-                    <option value="">-- Select Kid --</option>
+                    <option value="">-- @translate.GetLocalizedString("Select") @translate.GetLocalizedString("Kid") --</option>
                     @foreach (var kid in (List<DTO.Kid>)ViewBag.Kids)
                     {
                         <option value="@kid.Id" selected="@Model.Kid.Name.Equals(kid.Name)">@kid.Name</option>
@@ -47,9 +50,9 @@
             </div>
 
             <div class="form-group">
-                <label for="PriceId" class="control-label">Price</label>
+                <label for="PriceId" class="control-label">@translate.GetLocalizedString("Price")</label>
                 <select class="form-control" name="PriceId" id="PriceId">
-                    <option value="">-- Select Price --</option>
+                    <option value="">-- @translate.GetLocalizedString("Select") @translate.GetLocalizedString("Price") --</option>
                     @foreach (var price in (List<DTO.Price>)ViewBag.Prices)
                     {
                         <option value="@price.Id" selected="@((Model.Price.Value + " - " + Model.Price.Label).Equals((price.Value + " - " + price.Label)))">@(price.Value + " - " + price.Label)</option>
@@ -58,14 +61,14 @@
             </div>
 
             <div class="form-group mt-1">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="@translate.GetLocalizedString("Save")" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">@translate.GetLocalizedString("Back")</a>
 </div>
 
 @section Scripts {

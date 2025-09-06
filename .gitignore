@@ -606,3 +606,6 @@ $RECYCLE.BIN/
 # Ignore user-specific config and editor folders
 .config/
 .vscode/
+
+# Remove appsettings.json files
+**/appsettings.json

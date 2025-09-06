@@ -4,9 +4,19 @@
 @inject LocaleService SharedLocale
 
 @{
-    ViewData["Title"] = "Invoice";
-    
+    ViewData["Title"] = SharedLocale.GetLocalizedString("Invoice");
+
     var kidnames = Model.Select(m => m.KidName).Distinct().ToList();
+    String kidsDisplayNames = "";
+    for(int i = 0; i < kidnames.Count; i++)
+    {
+        kidsDisplayNames += kidnames[i];
+        if(i < kidnames.Count)
+        {
+            kidsDisplayNames += ", ";
+        }
+    }
+
     string downloadName = "";
     foreach (var kidname in kidnames)
     {
@@ -16,7 +26,8 @@
 
     string period = ViewBag.periodStart + " - " + ViewBag.periodEnd;
 }
-<h3 class="mb-3 mt-4">@period</h3>
+<h3 class="mb-1 mt-4">@period</h3>
+<h4 class="mb-2">@kidsDisplayNames</h4>
 
 <div id="content">
     <div class="d-flex justify-content-between align-items-start mb-5">
