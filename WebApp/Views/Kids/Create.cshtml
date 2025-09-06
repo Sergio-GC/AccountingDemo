@@ -1,12 +1,15 @@
-﻿@model DTO.Kid
+﻿@using WebApp.src
+@model DTO.Kid
+
+@inject LocaleService SharedLocalizer
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = SharedLocalizer.GetLocalizedString("Create New Kid");
 }
 
-<h1>Create</h1>
+<h1>@SharedLocalizer.GetLocalizedString("Create New Kid")</h1>
 
-<h4>Kid</h4>
+<h4>@SharedLocalizer.GetLocalizedString("Kid")</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -39,14 +42,14 @@
                 </label>
             </div>
             <div class="form-group mt-1">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="@SharedLocalizer.GetLocalizedString("Create Kid")" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Kids">Back to List</a>
+    <a asp-action="Kids">@SharedLocalizer.GetLocalizedString("Back")</a>
 </div>
 
 @section Scripts {

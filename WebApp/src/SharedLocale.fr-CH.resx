@@ -132,6 +132,9 @@
   <data name="Arrival" xml:space="preserve">
     <value>Heure d'arrivée</value>
   </data>
+  <data name="Back" xml:space="preserve">
+    <value>Retour</value>
+  </data>
   <data name="BackToList" xml:space="preserve">
     <value>Retourner à l'accueil</value>
   </data>
@@ -149,6 +152,12 @@
   </data>
   <data name="Create" xml:space="preserve">
     <value>Créer une nouvelle entrée</value>
+  </data>
+  <data name="Create Kid" xml:space="preserve">
+    <value>Ajouter l'enfant</value>
+  </data>
+  <data name="Create New Kid" xml:space="preserve">
+    <value>Ajouter un enfant</value>
   </data>
   <data name="Date" xml:space="preserve">
     <value>Date</value>
@@ -203,6 +212,12 @@
   </data>
   <data name="Price" xml:space="preserve">
     <value>Prix</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Enregistrer</value>
+  </data>
+  <data name="Siblings" xml:space="preserve">
+    <value>Frères/Soeurs</value>
   </data>
   <data name="Total hours" xml:space="preserve">
     <value>Nombre d'heures</value>

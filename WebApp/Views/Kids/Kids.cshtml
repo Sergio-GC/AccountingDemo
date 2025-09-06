@@ -5,13 +5,13 @@
 @model IEnumerable<DTO.Kid>
 
 @{
-    ViewData["Title"] = "Kids";
+    ViewData["Title"] = SharedLocalizer.GetLocalizedString("Kids");
 }
 
-<h1>Kids</h1>
+<h1>@SharedLocalizer.GetLocalizedString("Kids")</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">@SharedLocalizer.GetLocalizedString("Create New Kid")</a>
 </p>
 <table class="table">
     <thead>
