@@ -148,7 +148,7 @@
     <value>Êtes-vous sûr?</value>
   </data>
   <data name="Create" xml:space="preserve">
-    <value>Créer - fr-CH</value>
+    <value>Créer une nouvelle entrée</value>
   </data>
   <data name="Date" xml:space="preserve">
     <value>Date</value>
@@ -196,7 +196,7 @@
     <value>Prénom</value>
   </data>
   <data name="PeriodEnd" xml:space="preserve">
-    <value>Jusqu'au</value>
+    <value>Jusqu'à</value>
   </data>
   <data name="PeriodStart" xml:space="preserve">
     <value>Du</value>
