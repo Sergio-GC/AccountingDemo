@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="-- Select Kid --" xml:space="preserve">
+    <value>-- Select Kid --</value>
+  </data>
   <data name="Accueil" xml:space="preserve">
     <value>Home</value>
   </data>
@@ -204,6 +207,9 @@
   <data name="Name" xml:space="preserve">
     <value>Name</value>
   </data>
+  <data name="New working day" xml:space="preserve">
+    <value>New working day</value>
+  </data>
   <data name="PeriodEnd" xml:space="preserve">
     <value>To</value>
   </data>
@@ -215,6 +221,9 @@
   </data>
   <data name="Save" xml:space="preserve">
     <value>Save</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Select</value>
   </data>
   <data name="Siblings" xml:space="preserve">
     <value>Siblings</value>

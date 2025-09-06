@@ -1,12 +1,15 @@
+@using WebApp.src
 @model DTO.WDay
 
+@inject LocaleService translate
+
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = translate.GetLocalizedString("Create");
 }
 
-<h1>Create</h1>
+<h1>@translate.GetLocalizedString("Create")</h1>
 
-<h4>New Working Day</h4>
+<h4>@translate.GetLocalizedString("New working day")</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -17,7 +20,7 @@
                 <div class="form-group col-5 me-1">
                     <label for="KidId" class="control-label">Kid</label>
                     <select class="form-control" name="KidId" id="KidId">
-                        <option value="">-- Select Kid --</option>
+                        <option value="">@translate.GetLocalizedString("-- Select Kid --")</option>
                         @foreach (var kid in (List<DTO.Kid>)ViewBag.Kids)
                         {
                             <option value="@kid.Id">@kid.Name</option>
@@ -26,7 +29,7 @@
                 </div>
 
                 <div class="form-check form-switch col-4 mt-4 ms-2 mb-2">
-                    <label class="control-label">With siblings</label>
+                    <label class="control-label">@translate.GetLocalizedString("WithSiblings")</label>
                     <input class="form-check-input" type="checkbox" id="siblingsSwitch" name="siblingsSwitch">
                 </div>
             </div>
@@ -40,7 +43,7 @@
             <div class="form-group col-9 mb-2">
                 <label for="PriceId" class="control-label">Price</label>
                 <select class="form-control" name="PriceId" id="PriceId">
-                    <option value="">-- Select Price --</option>
+                    <option value="">-- @translate.GetLocalizedString("Select") @translate.GetLocalizedString("Price") --</option>
                     @foreach (var price in (List<DTO.Price>)ViewBag.Prices)
                     {
                         <option value="@price.Id">@(price.Value + " - " + price.Label)</option>
@@ -51,12 +54,12 @@
             <div id="timeContainer" class="mb-5">
                 <div class="form-row mb-2 d-flex">
                     <div class="form-group col-4 me-3">
-                        <label class="control-label">Arrival</label>
+                        <label class="control-label">@translate.GetLocalizedString("Arrival")</label>
                         <input class="form-control" type="time" name="arrivalHours"/>
                     </div>
 
                     <div class="form-group col-4 me-4 ms-3">
-                        <label class="control-label">Departure</label>
+                        <label class="control-label">@translate.GetLocalizedString("Departure")</label>
                         <input class="form-control" type="time" name="departureHours"/>
                     </div>
 
@@ -69,25 +72,25 @@
             </div>
 
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="@translate.GetLocalizedString("Create")" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">@translate.GetLocalizedString("Back")</a>
 </div>
 
 <div id="timeTemplate" style="display: none;">
     <div class="form-row mb-2 d-flex">
         <div class="form-group col-4 me-3">
-            <label class="control-label">Arrival</label>
+            <label class="control-label">@translate.GetLocalizedString("Arrival")</label>
             <input class="form-control" type="time" name="arrivalHours" />
         </div>
 
         <div class="form-group col-4 me-4 ms-3">
-            <label class="control-label">Departure</label>
+            <label class="control-label">@translate.GetLocalizedString("Departure")</label>
             <input class="form-control" type="time" name="departureHours" />
         </div>
 

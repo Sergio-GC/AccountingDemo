@@ -1,7 +1,10 @@
+@using WebApp.src
 @model IEnumerable<DTO.WDay>
 
+@inject LocaleService translate
+
 @{
-    ViewData["Title"] = "Calendar";
+    ViewData["Title"] = translate.GetLocalizedString("Calendar");
 }
 
 
@@ -46,6 +49,6 @@
 <h1>Calendar</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">@translate.GetLocalizedString("Create")</a>
 </p>
 <div id="calendar"></div>
