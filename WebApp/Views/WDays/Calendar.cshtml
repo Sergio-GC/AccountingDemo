@@ -1,7 +1,7 @@
 @model IEnumerable<DTO.WDay>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Calendar";
 }
 
 
@@ -43,10 +43,9 @@
     });
 </script>
 
-<h1>Index</h1>
+<h1>Calendar</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-    <div id="calendar"></div>
-</table>
+<div id="calendar"></div>
