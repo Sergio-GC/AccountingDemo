@@ -14,15 +14,21 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="LastName" class="control-label"></label>
+                        <input asp-for="LastName" class="form-control" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
             <div class="form-group">
                 <label asp-for="BirthDate" class="control-label"></label>
@@ -30,12 +36,12 @@
                 <span asp-validation-for="BirthDate" class="text-danger"></span>
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="mt-2" style="display: flex; justify-content: space-between; align-items: center;">
                 <h4>Siblings</h4>
                 <button class="btn btn-success" type="button" onclick="addSiblingDropdown()">➕</button>
             </div>
 
-            <div id="siblinglist">
+            <div class="mt-1" id="siblinglist">
                 <!-- List of already current siblings -->
                 @foreach (var sibling in Model.Siblings.Where(s => s.ToKidId != Model.Id))
                 {
@@ -53,7 +59,7 @@
             </div>
 
             <div id="siblingDropdownTemplate" style="display: none;">
-                <div class="sibling-entry" style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
+                <div class="sibling-entry mt-1" style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
                     <select name="SiblingIds" class="form-control sibling-dropdown">
                         <option value="">--- Select a kid ---</option>
                         @foreach (var kid in availableKids)
