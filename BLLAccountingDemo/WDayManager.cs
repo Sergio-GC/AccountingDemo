@@ -147,7 +147,9 @@ namespace BLLAccountingDemo
                     label += $"from {item.Arrival:HH\\:mm} to {item.Departure:HH\\:mm} ";
 
                     TimeSpan time = (TimeSpan)(item.Departure - item.Arrival);
-                    float timeHours = (float)time.TotalHours;
+                    // Convert the time into a float and round it to the previous 2 decimal points
+                    float timeHours = (float)Math.Round((Decimal)((float)time.TotalHours), 2, MidpointRounding.ToNegativeInfinity);
+                    
 
                     hoursForKid += timeHours;
                     amountForKid += timeHours * item.Price.Value;

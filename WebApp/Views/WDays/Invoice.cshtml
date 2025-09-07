@@ -11,7 +11,7 @@
     for(int i = 0; i < kidnames.Count; i++)
     {
         kidsDisplayNames += kidnames[i];
-        if(i < kidnames.Count)
+        if(i < kidnames.Count -1)
         {
             kidsDisplayNames += ", ";
         }
@@ -29,12 +29,21 @@
 <h3 class="mb-1 mt-4">@period</h3>
 <h4 class="mb-2">@kidsDisplayNames</h4>
 
+@{
+    // Calculate total hours in hours and minutes
+    float totalHours = Model.First().TotalHours;
+    int nbHours = (int)totalHours;
+    int nbMinutes = (int)((totalHours - nbHours) * 60);
+
+    string tHours = $"{nbHours}:{nbMinutes}";
+}
+
 <div id="content">
     <div class="d-flex justify-content-between align-items-start mb-5">
         <!-- Left: Table -->
         <table class="mb-0 table table-sm table-borderless" style="font-size: 1.1em">
             <tr>
-                <td style="padding: 2px 0; line-height: 1.1;">@(SharedLocale.GetLocalizedString("Total hours")): &#9;@(Model.First().TotalHours)</td>
+                <td style="padding: 2px 0; line-height: 1.1;">@(SharedLocale.GetLocalizedString("Total hours")): &#9;@tHours</td>
             </tr>
             <tr>
                 <td style="padding: 2px 0; line-height: 1.1;">@(SharedLocale.GetLocalizedString("Amount")): &#9;@(Model.First().TotalAmount) CHF</td>
@@ -88,6 +97,13 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Hours)
+                        @{
+                            // Display item.Hours in hh : mm format
+                            int itemHours = (int)item.Hours;
+                            int itemMinutes = (int)((item.Hours - itemHours) * 60);
+
+                            string itHours = $"{itemHours}:{itemMinutes}";
+                        }
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Amount)
