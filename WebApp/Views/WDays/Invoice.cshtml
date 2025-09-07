@@ -33,7 +33,7 @@
     // Calculate total hours in hours and minutes
     float totalHours = Model.First().TotalHours;
     int nbHours = (int)totalHours;
-    int nbMinutes = (int)((totalHours - nbHours) * 60);
+    int nbMinutes = (int)Math.Round((totalHours - nbHours) * 60);
 
     string tHours = $"{nbHours}:{nbMinutes}";
 }
@@ -96,7 +96,6 @@
                         @Html.DisplayFor(modelItem => item.Label)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Hours)
                         @{
                             // Display item.Hours in hh : mm format
                             int itemHours = (int)item.Hours;
@@ -104,6 +103,7 @@
 
                             string itHours = $"{itemHours}:{itemMinutes}";
                         }
+                        @itHours
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Amount)
