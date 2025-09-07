@@ -56,6 +56,9 @@ namespace BLLAccountingDemo
             {
                 await _context.SiblingRelationships.Where(sr => ids.Contains(sr.FromKidId) || ids.Contains(sr.ToKidId)).ExecuteDeleteAsync();
                 await _context.SaveChangesAsync();
+
+                // Clear the context tracker to avoid errors when adding old existing relationships
+                _context.ChangeTracker.Clear();
             }
 
             // 2. Create the new relationships
