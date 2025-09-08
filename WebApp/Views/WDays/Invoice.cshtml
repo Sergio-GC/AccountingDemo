@@ -111,7 +111,11 @@
                         @itHours
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Amount)
+                        @{
+                            // Display rounded amount
+                            double roundedAmount = Math.Round(item.Amount, 2, MidpointRounding.ToNegativeInfinity);
+                        }
+                        @roundedAmount
                     </td>
                 </tr>
             }
