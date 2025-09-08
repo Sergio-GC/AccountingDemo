@@ -22,12 +22,19 @@
 <h3 class="mb-1 mt-4">@period</h3>
 <h4 class="mb-2">@kidsDisplayNames</h4>
 
+@{
+    int nbHours = (int)Model.First().TotalHours;
+    int nbMinutes = nbHours * 60 - (int)Model.First().TotalHours * 60;
+
+    string totalHoursLabel = $"{nbHours.ToString().PadLeft(2, '0')}:{nbMinutes.ToString().PadLeft(2, '0')}";
+}
+
 <div id="content">
     <div class="d-flex justify-content-between align-items-start mb-5">
         <!-- Left: Table -->
         <table class="mb-0 table table-sm table-borderless" style="font-size: 1.1em">
             <tr>
-                <td style="padding: 2px 0; line-height: 1.1;">@(SharedLocale.GetLocalizedString("Total hours")): &#9;@(Model.First().TotalHours)</td>
+                <td style="padding: 2px 0; line-height: 1.1;">@(SharedLocale.GetLocalizedString("Total hours")): &#9;@totalHoursLabel</td>
             </tr>
             <tr>
                 <td style="padding: 2px 0; line-height: 1.1;">@(SharedLocale.GetLocalizedString("Amount")): &#9;@(Model.First().TotalAmount) CHF</td>
@@ -80,7 +87,13 @@
                         @Html.DisplayFor(modelItem => item.Label)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Hours)
+                        @{
+                            int itemHours = (int)item.Hours;
+                            int itemMinutes = itemHours * 60 - (int)item.Hours * 60;
+
+                            string itemTotalHours = $"{itemHours.ToString().PadLeft(2, '0')}:{itemMinutes.ToString().PadLeft(2, '0')}";
+                        }
+                        @itemTotalHours
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Amount)
