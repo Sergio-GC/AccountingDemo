@@ -6,7 +6,7 @@
 @{
     ViewData["Title"] = SharedLocale.GetLocalizedString("Invoice");
 
-    var kidnames = Model.Select(m => m.KidName).Distinct().ToList();
+    List<string> kidnames = Model.Select(m => m.KidName).Distinct().ToList();
     String kidsDisplayNames = "";
     for(int i = 0; i < kidnames.Count; i++)
     {
@@ -17,41 +17,20 @@
         }
     }
 
-    string downloadName = "";
-    foreach (var kidname in kidnames)
-    {
-        downloadName += kidname + ", ";
-    }
-    downloadName = downloadName.Remove(downloadName.Length - 2);
-
     string period = ViewBag.periodStart + " - " + ViewBag.periodEnd;
 }
 <h3 class="mb-1 mt-4">@period</h3>
 <h4 class="mb-2">@kidsDisplayNames</h4>
-
-@{
-    // Calculate total hours in hours and minutes
-    float totalHours = Model.First().TotalHours;
-    int nbHours = (int)totalHours;
-    double nbMinutes = Math.Round((totalHours - nbHours) * 60);
-
-    int inbMinutes = 15 * (int)Math.Round(nbMinutes / 15, MidpointRounding.ToNegativeInfinity);
-
-    string tHours = $"{nbHours.ToString().PadLeft(2, '0')}:{nbMinutes.ToString().PadLeft(2, '0')}";
-
-
-    double amount = Math.Round(Model.First().TotalAmount, 2, MidpointRounding.ToNegativeInfinity);
-}
 
 <div id="content">
     <div class="d-flex justify-content-between align-items-start mb-5">
         <!-- Left: Table -->
         <table class="mb-0 table table-sm table-borderless" style="font-size: 1.1em">
             <tr>
-                <td style="padding: 2px 0; line-height: 1.1;">@(SharedLocale.GetLocalizedString("Total hours")): &#9;@tHours</td>
+                <td style="padding: 2px 0; line-height: 1.1;">@(SharedLocale.GetLocalizedString("Total hours")): &#9;@(Model.First().TotalHours)</td>
             </tr>
             <tr>
-                <td style="padding: 2px 0; line-height: 1.1;">@(SharedLocale.GetLocalizedString("Amount")): &#9;@amount CHF</td>
+                <td style="padding: 2px 0; line-height: 1.1;">@(SharedLocale.GetLocalizedString("Amount")): &#9;@(Model.First().TotalAmount) CHF</td>
             </tr>
         </table>
 
@@ -101,21 +80,10 @@
                         @Html.DisplayFor(modelItem => item.Label)
                     </td>
                     <td>
-                        @{
-                            // Display item.Hours in hh : mm format
-                            int itemHours = (int)item.Hours;
-                            int itemMinutes = (int)((item.Hours - itemHours) * 60);
-
-                            string itHours = $"{itemHours.ToString().PadLeft(2, '0')}:{itemMinutes.ToString().PadLeft(2, '0')}";
-                        }
-                        @itHours
+                        @Html.DisplayFor(modelItem => item.Hours)
                     </td>
                     <td>
-                        @{
-                            // Display rounded amount
-                            double roundedAmount = Math.Round(item.Amount, 2, MidpointRounding.ToNegativeInfinity);
-                        }
-                        @roundedAmount
+                        @Html.DisplayFor(modelItem => item.Amount)
                     </td>
                 </tr>
             }
@@ -140,7 +108,7 @@
                 type: 'jpeg',
                 quality: 0.98
             },
-            filename: "@(period) - @(downloadName) - Invoice.pdf",
+            filename: "@(period) - @(kidsDisplayNames) - Invoice.pdf",
             html2canvas: { scale: 2 },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
