@@ -147,8 +147,11 @@ namespace BLLAccountingDemo
                     label += $"from {item.Arrival:HH\\:mm} to {item.Departure:HH\\:mm} ";
 
                     TimeSpan time = (TimeSpan)(item.Departure - item.Arrival);
-                    // Convert the time into a float and round it to the previous 2 decimal points
-                    float timeHours = (float)Math.Round((Decimal)((float)time.TotalHours), 2, MidpointRounding.ToNegativeInfinity);
+
+                    // Round the minutes to the nearest quarter hour
+                    int roundedMinutes = 15 * (int)Math.Round((double)time.Minutes / 15);
+                    // Calculate the decimal hours
+                    float timeHours = time.Hours + (roundedMinutes / 60);
                     
 
                     hoursForKid += timeHours;
@@ -170,12 +173,16 @@ namespace BLLAccountingDemo
                 });
             }
 
+            // Round totalAmounts
+
+
             // Update the totals
             foreach (var sum in summary)
             {
                 sum.TotalAmount = totalAmounts;
                 sum.TotalHours = totalHours;
             }
+
 
             return summary;
         }
