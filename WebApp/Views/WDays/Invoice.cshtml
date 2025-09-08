@@ -33,9 +33,14 @@
     // Calculate total hours in hours and minutes
     float totalHours = Model.First().TotalHours;
     int nbHours = (int)totalHours;
-    int nbMinutes = (int)Math.Round((totalHours - nbHours) * 60);
+    double nbMinutes = Math.Round((totalHours - nbHours) * 60);
 
-    string tHours = $"{nbHours}:{nbMinutes}";
+    int inbMinutes = 15 * (int)Math.Round(nbMinutes / 15, MidpointRounding.ToNegativeInfinity);
+
+    string tHours = $"{nbHours.ToString().PadLeft(2, '0')}:{nbMinutes.ToString().PadLeft(2, '0')}";
+
+
+    double amount = Math.Round(Model.First().TotalAmount, 2, MidpointRounding.ToNegativeInfinity);
 }
 
 <div id="content">
@@ -46,7 +51,7 @@
                 <td style="padding: 2px 0; line-height: 1.1;">@(SharedLocale.GetLocalizedString("Total hours")): &#9;@tHours</td>
             </tr>
             <tr>
-                <td style="padding: 2px 0; line-height: 1.1;">@(SharedLocale.GetLocalizedString("Amount")): &#9;@(Model.First().TotalAmount) CHF</td>
+                <td style="padding: 2px 0; line-height: 1.1;">@(SharedLocale.GetLocalizedString("Amount")): &#9;@amount CHF</td>
             </tr>
         </table>
 
