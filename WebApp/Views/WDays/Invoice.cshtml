@@ -106,7 +106,7 @@
                             int itemHours = (int)item.Hours;
                             int itemMinutes = (int)((item.Hours - itemHours) * 60);
 
-                            string itHours = $"{itemHours}:{itemMinutes}";
+                            string itHours = $"{itemHours.ToString().PadLeft(2, '0')}:{itemMinutes.ToString().PadLeft(2, '0')}";
                         }
                         @itHours
                     </td>
