@@ -22,7 +22,7 @@ namespace AccountingDemoAPI
                     options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
                 });
 
-            string connectionString = builder.Configuration.GetConnectionString("DefaultDb");
+            string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
             builder.Services.AddDbContext<Context>(options =>
                 options.UseLazyLoadingProxies()
