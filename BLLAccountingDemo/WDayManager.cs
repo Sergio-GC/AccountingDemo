@@ -45,10 +45,18 @@ namespace BLLAccountingDemo
 
         public void AddWDay(WDay wd)
         {
-            EFAccounting.Entities.WDay wDay = _mapper.Map<EFAccounting.Entities.WDay>(wd);
+            // Fetch Kid and Price from database to avoid tracking conflicts with nested objects
+            EFAccounting.Entities.Kid kid = _context.Kids.Where(k => k.Id == wd.Kid.Id).Single();
+            EFAccounting.Entities.Price price = _context.Prices.Where(p => p.Id == wd.Price.Id).Single();
 
-            _context.Attach(wDay.Kid);
-            _context.Attach(wDay.Price);
+            EFAccounting.Entities.WDay wDay = new EFAccounting.Entities.WDay
+            {
+                Date = wd.Date,
+                Arrival = wd.Arrival,
+                Departure = wd.Departure,
+                Kid = kid,
+                Price = price
+            };
 
             _context.Wdays.Add(wDay);
             _context.SaveChanges();
