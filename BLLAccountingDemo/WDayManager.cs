@@ -26,12 +26,12 @@ namespace BLLAccountingDemo
             DateOnly currentDay = DateOnly.FromDateTime(DateTime.Now);
             DateOnly lastDay = currentDay.AddDays(14);
 
-            return _mapper.Map<List<WDay>>(await _context.Wdays.AsNoTracking().Where(wd => wd.Date >= currentDay && wd.Date <= lastDay).ToListAsync());
+            return _mapper.Map<List<WDay>>(await _context.Wdays.Where(wd => wd.Date >= currentDay && wd.Date <= lastDay).ToListAsync());
         }
 
         public async Task<WDay> GetWDay(int id)
         {
-            return _mapper.Map<WDay>(await _context.Wdays.AsNoTracking().Where(wd => wd.Id == id).SingleAsync());
+            return _mapper.Map<WDay>(await _context.Wdays.Where(wd => wd.Id == id).SingleAsync());
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace BLLAccountingDemo
         /// <returns></returns>
         public async Task<List<WDay>> GetAllWDays()
         {
-            return _mapper.Map<List<WDay>>(await _context.Wdays.AsNoTracking().ToListAsync());
+            return _mapper.Map<List<WDay>>(await _context.Wdays.ToListAsync());
         }
 
         public void AddWDay(WDay wd)
@@ -56,8 +56,8 @@ namespace BLLAccountingDemo
 
         public void AddBulkWDays(WDaySubmission submission)
         {
-            List<EFAccounting.Entities.Kid> kids = _context.Kids.AsNoTracking().Where(k => submission.KidsIds.Contains(k.Id)).ToList();
-            EFAccounting.Entities.Price price = _context.Prices.AsNoTracking().Where(p => p.Id == submission.PriceId).Single();
+            List<EFAccounting.Entities.Kid> kids = _context.Kids.Where(k => submission.KidsIds.Contains(k.Id)).ToList();
+            EFAccounting.Entities.Price price = _context.Prices.Where(p => p.Id == submission.PriceId).Single();
 
             List<EFAccounting.Entities.WDay> wdays = new();
             foreach(var kid in kids)
@@ -82,7 +82,7 @@ namespace BLLAccountingDemo
         public async Task UpdateWDay(WDay wday) 
         {
             EFAccounting.Entities.WDay updatedWday = _mapper.Map<EFAccounting.Entities.WDay>(wday);
-            _context.Wdays.AsNoTracking()
+            _context.Wdays
                 .Where(wd => wd.Id == updatedWday.Id)
                 .ExecuteUpdate(u => u
                     .SetProperty(p => p.Arrival, updatedWday.Arrival)
@@ -90,12 +90,12 @@ namespace BLLAccountingDemo
                     .SetProperty(p => p.Date, updatedWday.Date)
                 );
 
-            EFAccounting.Entities.WDay ogwDay = await _context.Wdays.AsNoTracking().Where(w => w.Id == updatedWday.Id).SingleAsync();
-            ogwDay.Price = await _context.Prices.AsNoTracking()
+            EFAccounting.Entities.WDay ogwDay = await _context.Wdays.Where(w => w.Id == updatedWday.Id).SingleAsync();
+            ogwDay.Price = await _context.Prices
                 .Where(p => p.Id == updatedWday.Price.Id)
                 .SingleAsync();
 
-            ogwDay.Kid = await _context.Kids.AsNoTracking()
+            ogwDay.Kid = await _context.Kids
                 .Where(k => k.Id == updatedWday.Kid.Id)
                 .SingleAsync();
 
@@ -104,7 +104,7 @@ namespace BLLAccountingDemo
 
         public void DeleteWDay(int wdId)
         {
-            _context.Wdays.AsNoTracking().Where(w => w.Id == wdId).ExecuteDelete();
+            _context.Wdays.Where(w => w.Id == wdId).ExecuteDelete();
         }
 
         public async Task<List<InvoiceSummary>> GetSummary(InvoiceFormData formData)
@@ -113,13 +113,13 @@ namespace BLLAccountingDemo
             if(formData.KidSelectinoId == -1)
             {
                 // Get the Id of all kids
-                ids.AddRange(_context.Kids.AsNoTracking().Select(k => k.Id).ToList());
+                ids.AddRange(_context.Kids.Select(k => k.Id).ToList());
             }
             else
             {
                 // Get the Ids of the kid's siblings
                 if (!formData.WithSiblings.Equals("false", StringComparison.OrdinalIgnoreCase))
-                    ids.AddRange(_context.SiblingRelationships.AsNoTracking().Where(s => s.FromKidId == formData.KidSelectinoId).Select(sr => sr.ToKidId).ToList());
+                    ids.AddRange(_context.SiblingRelationships.Where(s => s.FromKidId == formData.KidSelectinoId).Select(sr => sr.ToKidId).ToList());
                 
                 ids.Add(formData.KidSelectinoId);
             }
@@ -128,7 +128,7 @@ namespace BLLAccountingDemo
             DateOnly endDate = DateOnly.Parse(formData.PeriodTo);
 
             List<EFAccounting.Entities.WDay> wdays = 
-                _context.Wdays.AsNoTracking().Where(wd => ids.Contains(wd.Kid.Id) && wd.Date >= startDate && wd.Date <= endDate).ToList();
+                _context.Wdays.Where(wd => ids.Contains(wd.Kid.Id) && wd.Date >= startDate && wd.Date <= endDate).ToList();
 
             var groupedWdays = wdays.GroupBy(gb => new { gb.Date, gb.Kid });
 
@@ -197,7 +197,7 @@ namespace BLLAccountingDemo
             {
                 EFAccounting.Entities.Kid efkid = _mapper.Map<EFAccounting.Entities.Kid>(k);
                 wdays.AddRange(
-                    _context.Wdays.AsNoTracking().Where(
+                    _context.Wdays.Where(
                         wd => wd.Kid == efkid 
                         && wd.Date >= StartDate 
                         && wd.Date <= EndDate
