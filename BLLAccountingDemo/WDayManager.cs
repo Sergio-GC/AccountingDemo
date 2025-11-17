@@ -136,7 +136,7 @@ namespace BLLAccountingDemo
             DateOnly endDate = DateOnly.Parse(formData.PeriodTo);
 
             List<EFAccounting.Entities.WDay> wdays = 
-                _context.Wdays.Where(wd => ids.Contains(wd.Kid.Id) && wd.Date >= startDate && wd.Date <= endDate).ToList();
+                await _context.Wdays.Where(wd => ids.Contains(wd.Kid.Id) && wd.Date >= startDate && wd.Date <= endDate).ToListAsync();
 
             var groupedWdays = wdays.GroupBy(gb => new { gb.Date, gb.Kid });
 
@@ -156,10 +156,10 @@ namespace BLLAccountingDemo
 
                     TimeSpan time = (TimeSpan)(item.Departure - item.Arrival);
 
-                    // Round the minutes to the nearest quarter hour
-                    int roundedMinutes = 15 * (int)Math.Round((double)time.Minutes / 15);
+                    // Round the minutes to the nearest five minutes
+                    int roundedMinutes = 5 * (int)Math.Round(time.Minutes / 5.0f);
                     // Calculate the decimal hours
-                    float timeHours = time.Hours + (roundedMinutes / 60);
+                    float timeHours = time.Hours + (roundedMinutes / 60.0f);
                     
 
                     hoursForKid += timeHours;
