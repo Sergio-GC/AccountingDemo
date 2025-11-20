@@ -43,6 +43,11 @@ namespace BLLAccountingDemo
             return _mapper.Map<List<WDay>>(await _context.Wdays.ToListAsync());
         }
 
+        public async Task<List<WDay>> GetWDaysByDate(DateOnly date)
+        {
+            return _mapper.Map<List<WDay>>(await _context.Wdays.AsNoTracking().Where(p => p.Date == date).ToListAsync());
+        }
+
         public void AddWDay(WDay wd)
         {
             // Fetch Kid and Price from database to avoid tracking conflicts with nested objects
