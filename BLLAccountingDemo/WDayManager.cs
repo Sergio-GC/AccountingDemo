@@ -45,7 +45,7 @@ namespace BLLAccountingDemo
 
         public async Task<List<WDay>> GetWDaysByDate(DateOnly date)
         {
-            return _mapper.Map<List<WDay>>(await _context.Wdays.AsNoTracking().Where(p => p.Date == date).ToListAsync());
+            return _mapper.Map<List<WDay>>(await _context.Wdays.Where(p => p.Date == date).ToListAsync());
         }
 
         public void AddWDay(WDay wd)
