@@ -33,6 +33,12 @@ namespace AccountingDemoAPI.Controllers
             return await _manager.GetAllWDays();
         }
 
+        [HttpGet("wdaysByDate")]
+        public async Task<ActionResult<List<WDay>>> GetWDaysByDate([FromQuery] DateOnly date)
+        {
+            return await _manager.GetWDaysByDate(date);
+        }
+
         [HttpPost("updateTime")]
         public async Task<IActionResult> UpdateArrival([FromBody] WDay wday, [FromQuery] bool IsArrival)
         {

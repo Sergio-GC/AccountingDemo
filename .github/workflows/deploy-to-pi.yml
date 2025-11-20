@@ -11,12 +11,12 @@ env:
   IMAGE_TAG: ${{ github.sha }}
 
 jobs:
-  build-and-test:
+  test:
     runs-on: ubuntu-latest
     env:
         ConnectionStrings__DefaultDb: ${{ secrets.DB_CONNECTION_STRING }}
         ASPNETCORE_ENVIRONMENT: CI
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -25,23 +25,30 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
+        cache: true
 
     - name: Restore dependencies
       run: dotnet restore
 
-    - name: Build
-      run: dotnet build --no-restore
-
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --verbosity normal
 
   build-and-push-images:
     runs-on: ubuntu-latest
-    needs: build-and-test
+    needs: test
+    strategy:
+      matrix:
+        include:
+          - name: api
+            file: ./AccountingDemoAPI/Dockerfile
+            image: accounting-api
+          - name: webapp
+            file: ./WebApp/Dockerfile
+            image: accounting-webapp
     env:
         ConnectionStrings__DefaultDb: ${{ secrets.DB_CONNECTION_STRING }}
         ASPNETCORE_ENVIRONMENT: CI
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -55,27 +62,16 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Build and push API image
+    - name: Build and push ${{ matrix.name }} image
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: ./AccountingDemoAPI/Dockerfile
+        file: ${{ matrix.file }}
         platforms: linux/arm64
         push: true
-        tags: ${{ env.DOCKER_REGISTRY }}/accounting-api:${{ env.IMAGE_TAG }},${{ env.DOCKER_REGISTRY }}/accounting-api:latest
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
-
-    - name: Build and push WebApp image
-      uses: docker/build-push-action@v5
-      with:
-        context: .
-        file: ./WebApp/Dockerfile
-        platforms: linux/arm64
-        push: true
-        tags: ${{ env.DOCKER_REGISTRY }}/accounting-webapp:${{ env.IMAGE_TAG }},${{ env.DOCKER_REGISTRY }}/accounting-webapp:latest
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
+        tags: ${{ env.DOCKER_REGISTRY }}/${{ matrix.image }}:${{ env.IMAGE_TAG }},${{ env.DOCKER_REGISTRY }}/${{ matrix.image }}:latest
+        cache-from: type=gha,scope=${{ matrix.name }}
+        cache-to: type=gha,mode=max,scope=${{ matrix.name }}
 
   deploy-to-pi:
     runs-on: ubuntu-latest

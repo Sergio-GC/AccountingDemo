@@ -34,6 +34,11 @@ namespace BLLAccountingDemo
             return _mapper.Map<WDay>(await _context.Wdays.Where(wd => wd.Id == id).SingleAsync());
         }
 
+        public async Task<List<WDay>> GetWDaysByDate(DateOnly date)
+        {
+            return _mapper.Map<List<WDay>>(await _context.Wdays.AsNoTracking().Where(p => p.Date == date).ToListAsync());
+        }
+
         /// <summary>
         /// Get ALL workdays
         /// </summary>
