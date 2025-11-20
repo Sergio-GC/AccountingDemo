@@ -34,7 +34,7 @@ namespace AccountingDemoAPI.Controllers
         }
 
         [HttpGet("wdaysByDate")]
-        public async Task<ActionResult<List<WDay>>> GetWDaysByDate([FromBody] DateOnly date)
+        public async Task<ActionResult<List<WDay>>> GetWDaysByDate([FromQuery] DateOnly date)
         {
             return await _manager.GetWDaysByDate(date);
         }
