@@ -1,6 +1,77 @@
-﻿@{
+@{
     ViewData["Title"] = "Privacy Policy";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="container py-4">
+    <h1 class="mb-4">@ViewData["Title"]</h1>
+
+    <div class="card">
+        <div class="card-body">
+            <p class="lead">Last updated: @DateTime.Now.ToString("MMMM dd, yyyy")</p>
+
+            <h2 class="h4 mt-4">Overview</h2>
+            <p>
+                This application is a personal project designed to help manage a small daycare center.
+                We are committed to protecting your privacy and handling your data with care and respect.
+            </p>
+
+            <h2 class="h4 mt-4">Information We Collect</h2>
+            <p>To provide our daycare management services, we collect and store the following information:</p>
+            <ul>
+                <li>Children's names and basic information</li>
+                <li>Attendance records and working days</li>
+                <li>Pricing and billing information</li>
+            </ul>
+
+            <h2 class="h4 mt-4">How We Use Your Information</h2>
+            <p>The information collected is used exclusively for:</p>
+            <ul>
+                <li>Managing daily attendance and schedules</li>
+                <li>Generating invoices and billing records</li>
+                <li>Maintaining accurate records for the daycare operation</li>
+            </ul>
+
+            <h2 class="h4 mt-4">Data Security</h2>
+            <p>
+                We take data security seriously. All information is stored securely in a protected database
+                with appropriate access controls. We implement industry-standard security measures to protect
+                your data from unauthorized access, disclosure, or misuse.
+            </p>
+
+            <h2 class="h4 mt-4">Data Retention</h2>
+            <p>
+                Your data is retained only for as long as necessary to provide our services and comply with
+                legal obligations. When data is no longer needed, it is promptly and securely deleted from
+                our systems.
+            </p>
+
+            <h2 class="h4 mt-4">Data Sharing</h2>
+            <p>
+                We do not share, sell, or distribute your personal information to third parties.
+                This is a personal project for managing a small daycare, and all data remains within
+                our secure system.
+            </p>
+
+            <h2 class="h4 mt-4">Your Rights</h2>
+            <p>You have the right to:</p>
+            <ul>
+                <li>Access your personal information</li>
+                <li>Request correction of inaccurate data</li>
+                <li>Request deletion of your data</li>
+                <li>Withdraw consent for data processing</li>
+            </ul>
+
+            <h2 class="h4 mt-4">Changes to This Policy</h2>
+            <p>
+                We may update this privacy policy from time to time. Any changes will be reflected on this page
+                with an updated revision date.
+            </p>
+
+            <h2 class="h4 mt-4">Contact</h2>
+            <p>
+                If you have any questions or concerns about this privacy policy or how your data is handled,
+                please contact the daycare administrator.
+            </p>
+        </div>
+    </div>
+</div>
