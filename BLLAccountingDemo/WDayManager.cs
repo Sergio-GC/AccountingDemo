@@ -140,8 +140,12 @@ namespace BLLAccountingDemo
             DateOnly startDate = DateOnly.Parse(formData.PeriodFrom);
             DateOnly endDate = DateOnly.Parse(formData.PeriodTo);
 
-            List<EFAccounting.Entities.WDay> wdays = 
-                await _context.Wdays.Where(wd => ids.Contains(wd.Kid.Id) && wd.Date >= startDate && wd.Date <= endDate).ToListAsync();
+            List<EFAccounting.Entities.WDay> wdays =
+                await _context.Wdays
+                    .Include(wd => wd.Kid)
+                    .Include(wd => wd.Price)
+                    .Where(wd => ids.Contains(wd.Kid.Id) && wd.Date >= startDate && wd.Date <= endDate)
+                    .ToListAsync();
 
             var groupedWdays = wdays.GroupBy(gb => new { gb.Date, gb.Kid });
 
