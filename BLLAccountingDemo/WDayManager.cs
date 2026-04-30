@@ -18,13 +18,13 @@ namespace BLLAccountingDemo
         }
 
         /// <summary>
-        /// Get workdays for the next 2 weeks
+        /// Get workdays for the next month
         /// </summary>
         /// <returns></returns>
         public async Task<List<WDay>> GetWDays()
         {
             DateOnly currentDay = DateOnly.FromDateTime(DateTime.Now);
-            DateOnly lastDay = currentDay.AddDays(14);
+            DateOnly lastDay = currentDay.AddMonths(1);
 
             return _mapper.Map<List<WDay>>(await _context.Wdays.Where(wd => wd.Date >= currentDay && wd.Date <= lastDay).ToListAsync());
         }
