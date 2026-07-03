@@ -1,4 +1,6 @@
 
+using System.Security.Cryptography;
+using System.Text;
 using BLLAccountingDemo;
 using BLLAccountingDemo.Mapping;
 using EFAccounting;
@@ -57,6 +59,23 @@ namespace AccountingDemoAPI
 
 
             app.MapControllers();
+
+            // Use the api key from the configuration file to check the authenticity of the requests
+            app.Use(async (context, next) =>
+            {
+                string expectedKey = app.Configuration["Api:Key"] ?? string.Empty;
+                if (!context.Request.Headers.TryGetValue("X-API-Key", out var key) ||
+                    !CryptographicOperations.FixedTimeEquals(
+                        Encoding.UTF8.GetBytes(key.ToString()),
+                        Encoding.UTF8.GetBytes(expectedKey)
+                    ))
+                {
+                    context.Response.StatusCode = 401;
+                    return;
+                }
+
+                await next(); 
+            });
 
             app.Run();
         }

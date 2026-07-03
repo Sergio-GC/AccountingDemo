@@ -109,6 +109,7 @@ jobs:
           # Create a .env file
           install -m 600 /dev/null .env
           echo "DB_CONNECTION_STRING=${{ secrets.DB_CONNECTION_STRING }}" > .env
+          echo "API_KEY=${{ secrets.API_KEY }}" >> .env
           
           # Create production docker-compose if it doesn't exist
           if [ ! -f docker-compose.yml ]; then
@@ -125,6 +126,7 @@ jobs:
                 - ASPNETCORE_URLS=http://+:5000
                 - ConnectionStrings__DefaultDb=${DB_CONNECTION_STRING}
                 - TZ=Europe/Zurich
+                - Api__Key=${API_KEY}
               restart: unless-stopped
               container_name: accounting-api
               networks:
